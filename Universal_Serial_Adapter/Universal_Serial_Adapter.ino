@@ -89,10 +89,16 @@ void setMode(serialmode aMode) {
 void setSelection(serialmode aMode) {
   serialmode previousSelection = selectedMode;
   selectedMode = aMode;
+  
+  int yLocOne = yLoc(1);
+  int xSelected = xLoc(selectedMode) + CHAR_HEIGHT;
+  int xPrevious = xLoc(previousSelection) + CHAR_HEIGHT;
+
   int previousLength = strlen(modeToText[previousSelection]) * CHAR_WIDTH;
   int selectedLength = strlen(modeToText[selectedMode]) * CHAR_WIDTH;
-  lcd.setLine(xLoc(selectedMode) + CHAR_HEIGHT, yLoc(1), xLoc(selectedMode) + CHAR_HEIGHT, yLoc(1) + selectedLength, HILIGHT);
-  lcd.setLine(xLoc(previousSelection) + CHAR_HEIGHT, yLoc(1), xLoc(previousSelection) + CHAR_HEIGHT, yLoc(1) + previousLength, BACKGROUND);
+
+  lcd.setLine(xSelected, yLocOne, xSelected, yLocOne + selectedLength, HILIGHT);
+  lcd.setLine(xPrevious, yLocOne, xPrevious, yLocOne + previousLength, BACKGROUND);
 }
 
 void printMode(serialmode aMode) {
