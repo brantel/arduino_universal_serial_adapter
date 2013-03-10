@@ -14,8 +14,8 @@
   
   Button Map:
     S1: Up
-    S2: Down
-    S3: Select/Enter
+    S2: Select/Enter
+    S3: Down
   
   Serial Modes:
     Phone UART
