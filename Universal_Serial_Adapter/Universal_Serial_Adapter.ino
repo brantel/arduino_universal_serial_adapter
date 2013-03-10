@@ -51,6 +51,24 @@ void setup() {
 }
 
 void loop() {
+  // Up
+  if (!digitalRead(buttonPins[2])) {
+    serialmode newMode = (serialmode)(selectedMode - 1);
+    if (newMode >= 0) {
+      setSelection(newMode);
+    }
+    // Wait for release before going on
+    while(!digitalRead(buttonPins[2]));
+  }
+
+  // Select / Enter
+  if (!digitalRead(buttonPins[1])) {
+    setMode(selectedMode);
+    // Wait for release before going on
+    while(!digitalRead(buttonPins[1]));
+  }
+  
+  // Down
   if (!digitalRead(buttonPins[0])) {
     serialmode newMode = (serialmode)(selectedMode + 1);
     if (newMode <= cisco) {
@@ -58,21 +76,6 @@ void loop() {
     }
     // Wait for release before going on
     while(!digitalRead(buttonPins[0]));
-  }
-
-  if (!digitalRead(buttonPins[1])) {
-    serialmode newMode = (serialmode)(selectedMode - 1);
-    if (newMode >= 0) {
-      setSelection(newMode);
-    }
-    // Wait for release before going on
-    while(!digitalRead(buttonPins[1]));
-  }
-
-  if (!digitalRead(buttonPins[2])) {
-    setMode(selectedMode);
-    // Wait for release before going on
-    while(!digitalRead(buttonPins[2]));
   }
 }
 
