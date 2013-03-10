@@ -165,9 +165,6 @@ void printTx(bool show) {
 }
 
 void printLineSpeed(linespeed aLineSpeed) {
-  printRx(true);
-  printTx(true);
-
   int xPos = xLoc(6);
   int yPos = yLoc(5);
   
