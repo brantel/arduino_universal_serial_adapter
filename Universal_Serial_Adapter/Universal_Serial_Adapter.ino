@@ -46,6 +46,9 @@ void setup() {
     printMode((serialmode)i);
   }
   
+  // Print the Rx/Tx/Speed titles
+  printTitles();
+  
   // Setup defaults
   setDefaults();
 }
@@ -79,6 +82,11 @@ void loop() {
   }
 }
 
+void setLineSpeed(linespeed aLineSpeed) {
+  currentLineSpeed = aLineSpeed;
+  printLineSpeed(aLineSpeed);
+}
+
 void setMode(serialmode aMode) {
   serialmode previousMode = currentMode;
   currentMode = aMode;
@@ -100,8 +108,3 @@ void setSelection(serialmode aMode) {
   lcd.setLine(xSelected, yLocOne, xSelected, yLocOne + selectedLength, HILIGHT);
   lcd.setLine(xPrevious, yLocOne, xPrevious, yLocOne + previousLength, BACKGROUND);
 }
-
-void printMode(serialmode aMode) {
-  lcd.setStr(modeToText[aMode], xLoc(aMode), yLoc(1), TEXT, BACKGROUND);
-}
-
