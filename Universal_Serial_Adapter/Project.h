@@ -100,73 +100,12 @@ void setMode(serialmode aMode);
 void setSelection(serialmode aMode);
 void setLineSpeed(linespeed aLineSpeed);
 
-// Defaults
-void setDefaults() {
-  setMode(phone);
-  setSelection(phone);
-  setLineSpeed(oneNineteenTwoK);
-}
-
 // Figure out offsets for text printing
 int xLoc(float toSkip) { // Physically -- vertical
   return (CHAR_HEIGHT * toSkip) + (CHAR_HEIGHT / 2);
 }
 int yLoc (float toSkip) { // Physical -- horizontal
   return (CHAR_WIDTH * toSkip) + (CHAR_WIDTH / 2);
-}
-
-void printTitles() {
-  lcd.setStr(" RX  Ln Spd  Tx ", xLoc(5), 0, TEXT, BACKGROUND);
-}
-
-void printRx(bool show) {
-  int vertXPosStart = xLoc(6.25);
-  int vertYPosStart = yLoc(1.5);
-  int vertXPosEnd = xLoc(7.25);
-  int vertYPosEnd = yLoc(1.5);
-
-  int lftXPosStart = vertXPosEnd;
-  int lftYPosStart = vertYPosStart;
-  int lftXPosEnd = vertXPosStart + (CHAR_HEIGHT / 2);
-  int lftYPosEnd = vertYPosStart - CHAR_WIDTH;
-
-  int rtXPosStart = vertXPosEnd;
-  int rtYPosStart = vertYPosStart;
-  int rtXPosEnd = vertXPosStart + (CHAR_HEIGHT / 2);
-  int rtYPosEnd = vertYPosStart + CHAR_WIDTH;
-
-  int color = show ? EMERALD : BACKGROUND;
-
-  lcd.setLine(vertXPosStart, vertYPosStart, vertXPosEnd, vertYPosEnd, color);
-  lcd.setLine(lftXPosStart, lftYPosStart, lftXPosEnd, lftYPosEnd, color);
-  lcd.setLine(rtXPosStart, rtYPosStart, rtXPosEnd, rtYPosEnd, color);
-}
-
-void printTx(bool show) {
-  int vertXPosStart = xLoc(6.25);
-  int vertYPosStart = yLoc(13.5);
-  int vertXPosEnd = xLoc(7.25);
-  int vertYPosEnd = yLoc(13.5);
-
-  int lftXPosStart = vertXPosStart;
-  int lftYPosStart = vertYPosStart;
-  int lftXPosEnd = vertXPosStart + (CHAR_HEIGHT / 2);
-  int lftYPosEnd = vertYPosStart - CHAR_WIDTH;
-
-  int rtXPosStart = vertXPosStart;
-  int rtYPosStart = vertYPosStart;
-  int rtXPosEnd = vertXPosStart + (CHAR_HEIGHT / 2);
-  int rtYPosEnd = vertYPosStart + CHAR_WIDTH;
-  
-  int color = show ? SKYBLUE : BACKGROUND;
-
-  lcd.setLine(vertXPosStart, vertYPosStart, vertXPosEnd, vertYPosEnd, color);
-  lcd.setLine(lftXPosStart, lftYPosStart, lftXPosEnd, lftYPosEnd, color);
-  lcd.setLine(rtXPosStart, rtYPosStart, rtXPosEnd, rtYPosEnd, color);
-}
-
-void printMode(serialmode aMode) {
-  lcd.setStr(modeToText[aMode], xLoc(aMode), yLoc(1), TEXT, BACKGROUND);
 }
 
 

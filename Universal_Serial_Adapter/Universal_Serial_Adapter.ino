@@ -82,6 +82,13 @@ void loop() {
   }
 }
 
+// Defaults
+void setDefaults() {
+  setMode(phone);
+  setSelection(phone);
+  setLineSpeed(oneNineteenTwoK);
+}
+
 void setLineSpeed(linespeed aLineSpeed) {
   currentLineSpeed = aLineSpeed;
   bool sel = selectedMode == modelinespeed ? true : false;
@@ -110,6 +117,14 @@ void setSelection(serialmode aMode) {
   lcd.setLine(xPrevious, yLocOne, xPrevious, yLocOne + previousLength, BACKGROUND);
 }
 
+void printTitles() {
+  lcd.setStr(" RX  Ln Spd  Tx ", xLoc(5), 0, TEXT, BACKGROUND);
+}
+
+void printMode(serialmode aMode) {
+  lcd.setStr(modeToText[aMode], xLoc(aMode), yLoc(1), TEXT, BACKGROUND);
+}
+
 void printLineSpeed(linespeed aLineSpeed, bool selected) {
   int xPosText = xLoc(6);
   int yPosText = yLoc(5);
@@ -127,4 +142,50 @@ void printLineSpeed(linespeed aLineSpeed, bool selected) {
   if (selected) {
     lcd.setLine(xPosLine, yPosLine, xPosLine, yPosLine + length * CHAR_WIDTH, HILIGHT);
   }
+}
+
+void printRx(bool show) {
+  int vertXPosStart = xLoc(6.25);
+  int vertYPosStart = yLoc(1.5);
+  int vertXPosEnd = xLoc(7.25);
+  int vertYPosEnd = yLoc(1.5);
+
+  int lftXPosStart = vertXPosEnd;
+  int lftYPosStart = vertYPosStart;
+  int lftXPosEnd = vertXPosStart + (CHAR_HEIGHT / 2);
+  int lftYPosEnd = vertYPosStart - CHAR_WIDTH;
+
+  int rtXPosStart = vertXPosEnd;
+  int rtYPosStart = vertYPosStart;
+  int rtXPosEnd = vertXPosStart + (CHAR_HEIGHT / 2);
+  int rtYPosEnd = vertYPosStart + CHAR_WIDTH;
+
+  int color = show ? EMERALD : BACKGROUND;
+
+  lcd.setLine(vertXPosStart, vertYPosStart, vertXPosEnd, vertYPosEnd, color);
+  lcd.setLine(lftXPosStart, lftYPosStart, lftXPosEnd, lftYPosEnd, color);
+  lcd.setLine(rtXPosStart, rtYPosStart, rtXPosEnd, rtYPosEnd, color);
+}
+
+void printTx(bool show) {
+  int vertXPosStart = xLoc(6.25);
+  int vertYPosStart = yLoc(13.5);
+  int vertXPosEnd = xLoc(7.25);
+  int vertYPosEnd = yLoc(13.5);
+
+  int lftXPosStart = vertXPosStart;
+  int lftYPosStart = vertYPosStart;
+  int lftXPosEnd = vertXPosStart + (CHAR_HEIGHT / 2);
+  int lftYPosEnd = vertYPosStart - CHAR_WIDTH;
+
+  int rtXPosStart = vertXPosStart;
+  int rtYPosStart = vertYPosStart;
+  int rtXPosEnd = vertXPosStart + (CHAR_HEIGHT / 2);
+  int rtYPosEnd = vertYPosStart + CHAR_WIDTH;
+  
+  int color = show ? SKYBLUE : BACKGROUND;
+
+  lcd.setLine(vertXPosStart, vertYPosStart, vertXPosEnd, vertYPosEnd, color);
+  lcd.setLine(lftXPosStart, lftYPosStart, lftXPosEnd, lftYPosEnd, color);
+  lcd.setLine(rtXPosStart, rtYPosStart, rtXPosEnd, rtYPosEnd, color);
 }
