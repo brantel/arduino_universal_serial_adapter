@@ -42,7 +42,7 @@ void setup() {
   
   // Print the modes
   //   Uses enum trickery -- don't assign values to serialmode enum values
-  for (int i=0; i<=cisco; i++) {
+  for (int i=0; i<modelinespeed; i++) {
     printMode((serialmode)i);
   }
   
@@ -84,7 +84,8 @@ void loop() {
 
 void setLineSpeed(linespeed aLineSpeed) {
   currentLineSpeed = aLineSpeed;
-  printLineSpeed(aLineSpeed);
+  bool sel = selectedMode == modelinespeed ? true : false;
+  printLineSpeed(aLineSpeed, sel);
 }
 
 void setMode(serialmode aMode) {
@@ -107,4 +108,23 @@ void setSelection(serialmode aMode) {
 
   lcd.setLine(xSelected, yLocOne, xSelected, yLocOne + selectedLength, HILIGHT);
   lcd.setLine(xPrevious, yLocOne, xPrevious, yLocOne + previousLength, BACKGROUND);
+}
+
+void printLineSpeed(linespeed aLineSpeed, bool selected) {
+  int xPosText = xLoc(6);
+  int yPosText = yLoc(5);
+  
+  int xPosLine = xLoc(7);
+  int yPosLine = yLoc(5);
+  
+  char* toPrint = linespeeds[aLineSpeed].description;
+  int length = strlen(toPrint);
+  
+  lcd.setStr("       ", xPosText, yPosText, BACKGROUND, BACKGROUND);
+  lcd.setLine(xPosLine, yPosLine, xPosLine, yPosLine + 7 * CHAR_WIDTH, BACKGROUND);
+
+  lcd.setStr(toPrint, xPosText, yPosText, TEXT, BACKGROUND);
+  if (selected) {
+    lcd.setLine(xPosLine, yPosLine, xPosLine, yPosLine + length * CHAR_WIDTH, HILIGHT);
+  }
 }

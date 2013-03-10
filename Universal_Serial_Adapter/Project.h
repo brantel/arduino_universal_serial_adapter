@@ -46,6 +46,7 @@ enum serialmode {
   db9_norm, 
   db9_null, 
   cisco,
+  modelinespeed,
   none=-1
 };
 
@@ -162,14 +163,6 @@ void printTx(bool show) {
   lcd.setLine(vertXPosStart, vertYPosStart, vertXPosEnd, vertYPosEnd, color);
   lcd.setLine(lftXPosStart, lftYPosStart, lftXPosEnd, lftYPosEnd, color);
   lcd.setLine(rtXPosStart, rtYPosStart, rtXPosEnd, rtYPosEnd, color);
-}
-
-void printLineSpeed(linespeed aLineSpeed) {
-  int xPos = xLoc(6);
-  int yPos = yLoc(5);
-  
-  lcd.setStr("       ", xPos, yPos, BACKGROUND, BACKGROUND);
-  lcd.setStr(linespeeds[aLineSpeed].description, xPos, yPos, TEXT, BACKGROUND);
 }
 
 void printMode(serialmode aMode) {
