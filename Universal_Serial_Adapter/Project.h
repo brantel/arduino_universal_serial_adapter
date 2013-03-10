@@ -165,11 +165,17 @@ void printTx(bool show) {
 }
 
 void printLineSpeed(linespeed aLineSpeed) {
-  lcd.setStr(linespeeds[aLineSpeed].description, xLoc(6), yLoc(5), TEXT, BACKGROUND);
+  printRx(true);
+  printTx(true);
+
+  int xPos = xLoc(6);
+  int yPos = yLoc(5);
+  
+  lcd.setStr("       ", xPos, yPos, BACKGROUND, BACKGROUND);
+  lcd.setStr(linespeeds[aLineSpeed].description, xPos, yPos, TEXT, BACKGROUND);
 }
 
 void printMode(serialmode aMode) {
-  lcd.setStr("        ", xLoc(aMode), yLoc(1), BACKGROUND, BACKGROUND);
   lcd.setStr(modeToText[aMode], xLoc(aMode), yLoc(1), TEXT, BACKGROUND);
 }
 
