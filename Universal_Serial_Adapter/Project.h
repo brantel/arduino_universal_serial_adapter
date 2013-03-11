@@ -67,12 +67,13 @@ enum linespeed {
   thirtyeightFourK,
   fiftysevenFiveK,
   oneNineteenTwoK,
+  maxlinespeed,
   zero=-1
 };
 
 // Description / speed scruct to use in lookup table
 struct linespeedinfo {
-  char description[8];
+  char* description;
   int linespeed;
 };
 

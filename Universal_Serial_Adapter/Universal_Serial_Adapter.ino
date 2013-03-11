@@ -90,9 +90,14 @@ void setDefaults() {
 }
 
 void setLineSpeed(linespeed aLineSpeed) {
-  currentLineSpeed = aLineSpeed;
+  if (aLineSpeed >= maxlinespeed) {
+    currentLineSpeed = (linespeed)0;
+  }
+  else {
+    currentLineSpeed = aLineSpeed;
+  }
   bool sel = selectedMode == modelinespeed ? true : false;
-  printLineSpeed(aLineSpeed, sel);
+  printLineSpeed(currentLineSpeed, sel);
 }
 
 void setMode(serialmode aMode) {
@@ -102,6 +107,9 @@ void setMode(serialmode aMode) {
     
     lcd.setStr(" ", xLoc(previousMode), yLoc(0), TEXT, BACKGROUND);
     lcd.setStr("*", xLoc(currentMode), yLoc(0), TEXT, BACKGROUND);
+  }
+  else {
+    setLineSpeed((linespeed)(currentLineSpeed + 1));
   }
 }
 
