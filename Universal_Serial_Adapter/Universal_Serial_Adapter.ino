@@ -74,7 +74,7 @@ void loop() {
   // Down
   if (!digitalRead(buttonPins[0])) {
     serialmode newMode = (serialmode)(selectedMode + 1);
-    if (newMode <= cisco) {
+    if (newMode <= modelinespeed) {
       setSelection(newMode);
     }
     // Wait for release before going on
@@ -96,10 +96,13 @@ void setLineSpeed(linespeed aLineSpeed) {
 }
 
 void setMode(serialmode aMode) {
-  serialmode previousMode = currentMode;
-  currentMode = aMode;
-  lcd.setStr(" ", xLoc(previousMode), yLoc(0), TEXT, BACKGROUND); // Clear old *
-  lcd.setStr("*", xLoc(currentMode), yLoc(0), TEXT, BACKGROUND); // Add new *
+  if (aMode != modelinespeed) {
+    serialmode previousMode = currentMode;
+    currentMode = aMode;
+    
+    lcd.setStr(" ", xLoc(previousMode), yLoc(0), TEXT, BACKGROUND);
+    lcd.setStr("*", xLoc(currentMode), yLoc(0), TEXT, BACKGROUND);
+  }
 }
 
 void setSelection(serialmode aMode) {
@@ -107,14 +110,40 @@ void setSelection(serialmode aMode) {
   selectedMode = aMode;
   
   int yLocOne = yLoc(1);
-  int xSelected = xLoc(selectedMode) + CHAR_HEIGHT;
-  int xPrevious = xLoc(previousSelection) + CHAR_HEIGHT;
+  
+  int xSelected = 0;
+  if (selectedMode != modelinespeed) {
+    xSelected = xLoc(selectedMode) + CHAR_HEIGHT;
+  }
+  
+  int xPrevious = 0;
+  if (previousSelection != modelinespeed) {
+    xPrevious = xLoc(previousSelection) + CHAR_HEIGHT;
+  }
 
-  int previousLength = strlen(modeToText[previousSelection]) * CHAR_WIDTH;
-  int selectedLength = strlen(modeToText[selectedMode]) * CHAR_WIDTH;
-
-  lcd.setLine(xSelected, yLocOne, xSelected, yLocOne + selectedLength, HILIGHT);
-  lcd.setLine(xPrevious, yLocOne, xPrevious, yLocOne + previousLength, BACKGROUND);
+  int previousLength = 0;
+  if (previousSelection != modelinespeed) {
+    previousLength = strlen(modeToText[previousSelection]) * CHAR_WIDTH;
+  }
+  
+  int selectedLength = 0;
+  if (selectedMode != modelinespeed) {
+    selectedLength = strlen(modeToText[selectedMode]) * CHAR_WIDTH;
+  }
+  
+  if (selectedMode != modelinespeed) {
+    lcd.setLine(xSelected, yLocOne, xSelected, yLocOne + selectedLength, HILIGHT);
+  }
+  else {
+    printLineSpeed(currentLineSpeed, true);
+  }
+  
+  if (previousSelection != modelinespeed) {
+    lcd.setLine(xPrevious, yLocOne, xPrevious, yLocOne + previousLength, BACKGROUND);
+  }
+  else {
+    printLineSpeed(currentLineSpeed, false);
+  }
 }
 
 void printTitles() {
