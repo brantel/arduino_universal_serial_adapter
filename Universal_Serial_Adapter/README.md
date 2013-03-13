@@ -1,6 +1,7 @@
 Arduino Universal Serial Adapter
-Sketch
 ================================
+Sketch
+======
   This sketch currently only shows the four serial modes and
   uses S1-S3 to select the current mode.
   
