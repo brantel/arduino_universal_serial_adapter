@@ -8,7 +8,7 @@
   attribute.
 */
 
-#include <ColorLCDShield.h>
+#include "ColorLCDShield.h"
 
 // Standard colors
 #define BACKGROUND  BLACK
