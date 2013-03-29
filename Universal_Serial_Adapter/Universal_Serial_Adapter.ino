@@ -50,22 +50,22 @@ char* modeToText[4] = {
 // Known and supported line speeds
 linespeedinfo linespeeds[6] = {
   {
-    "2400b", 2400  }
+    "2400b", 2400      }
   ,
   {
-    "9600b", 9600  }
+    "9600b", 9600      }
   ,
   {
-    "19.2k", 19200  }
+    "19.2k", 19200      }
   ,
   {
-    "38.4k", 38400  }
+    "38.4k", 38400      }
   ,
   {
-    "57.5k", 57600  }
+    "57.5k", 57600      }
   ,
   {
-    "115k", 115200  }
+    "115k", 115200      }
 };
 
 // LCD
@@ -113,9 +113,24 @@ void setup() {
 
   // Setup defaults
   setDefaults();
+
+  Serial.begin(9600);
+  Serial1.begin(9600);
 }
 
 void loop() {
+  // read from port 1, send to port 0:
+  if (Serial1.available()) {
+    int inByte = Serial1.read();
+    Serial.write(inByte);
+  }
+
+  // read from port 0, send to port 1:
+  if (Serial.available()) {
+    int inByte = Serial.read();
+    Serial1.write(inByte);
+  }
+
   xAxis=map(analogRead(xpin), 0, 1023, 0, 10);
   yAxis=map(analogRead(ypin), 0, 1023, 0, 10);
 
@@ -154,4 +169,6 @@ void loop() {
     downCount = 0;
   }
 }
+
+
 
