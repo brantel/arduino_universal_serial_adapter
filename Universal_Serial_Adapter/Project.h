@@ -8,7 +8,16 @@
   attribute.
 */
 
-#include "ColorLCDShield.h"
+// Pinout / things that need configuration
+#define okButtonPin     23
+#define okButtonLed     22
+#define cancelButtonPin 25
+#define cancelButtonLed 24
+#define pspXPin         0 // After GND / @ edge
+#define pspYPin         1 // Between VCC and gnd
+
+// Don't change anything below here
+// -----------------------------------------------------------------------------
 
 // Standard colors
 #define BACKGROUND  BLACK
@@ -50,12 +59,6 @@ struct linespeedinfo {
 
 // Known and supported line speeds
 extern linespeedinfo linespeeds[];
-
-// LCD
-extern LCDShield lcd;   // Line length max is 16
-
-// Buttons
-extern int buttonPins[];
 
 // Mode info needed
 extern serialmode currentMode;
