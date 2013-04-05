@@ -4,3 +4,6 @@
 [submodule "Libraries/Adafruit-GFX-Library"]
 	path = Libraries/Adafruit-GFX-Library
 	url = git://github.com/adafruit/Adafruit-GFX-Library.git
+[submodule "Libraries/Adafruit-SD"]
+	path = Libraries/Adafruit-SD
+	url = git://github.com/adafruit/SD.git
