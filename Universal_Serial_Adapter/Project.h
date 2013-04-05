@@ -8,6 +8,9 @@
   attribute.
 */
 
+#ifndef Project_h
+#define Project_h
+
 // Pinout / things that need configuration
 #define okButtonPin     23
 #define okButtonLed     22
@@ -65,3 +68,4 @@ extern serialmode currentMode;
 extern serialmode selectedMode;
 extern linespeed currentLineSpeed;
 
+#endif

@@ -9,12 +9,11 @@
  */
 
 #include "Project.h"
+#include "UIButton.h"
 
-// Button state tracking
-int okButtonState = 0; 
-int prevOkButtonState = okButtonState;
-int cancelButtonState = 0;
-int prevCancelButtonState = prevCancelButtonState;
+// Button's controlling UI
+UIButton* okButton = new UIButton(22, 23);
+UIButton* cancelButton = new UIButton(24, 25);
 
 // PSP joystick tracking
 long pspUpCount = 0; // Used to slow down how fast we repeat up movement
@@ -36,15 +35,6 @@ void setDefaults() {
 }
 
 void setup() {
-  // Buttons
-  pinMode(okButtonPin, INPUT);
-  pinMode(cancelButtonPin, INPUT);
-
-  // Button LEDs
-  pinMode(okButtonLed, OUTPUT);
-  digitalWrite(okButtonLed, HIGH);
-  pinMode(cancelButtonLed, OUTPUT);
-  digitalWrite(cancelButtonLed, HIGH);
 
   // Setup defaults
   setDefaults();
@@ -92,7 +82,7 @@ void loop() {
 
 
   // Select / Enter
-  if (digitalRead(okButtonPin)) {
+  if (okButton->isPressed()) {
     //FIXME: Re-enable once new LCD is online
     //setMode(selectedMode);
   }
