@@ -10,13 +10,8 @@
 
 #include "Project.h"
 
-// Mode info needed
-serialmode currentMode = none;
-serialmode selectedMode = none;
-linespeed currentLineSpeed = zero;
-linespeed selectedLineSpeed = zero;
-voltage currentVoltage = zero;
-voltage selectedVoltage = zero;
+UIButton* okButton;
+UIButton* cancelButton;
 
 // Defaults
 void setDefaults() {
@@ -27,14 +22,22 @@ void setDefaults() {
 }
 
 void setup() {
+  Serial.begin(9600);
+  Serial.println("Setup!");
 
   // Setup defaults
   setDefaults();
 
-  Serial.begin(9600);
-  Serial1.begin(9600);
+  okButton = new UIButton(okButtonPin, okButtonLed);
+  cancelButton = new UIButton(cancelButtonPin, cancelButtonLed);
 }
 
 void loop() {
-  
+	if (okButton->isPressed()) {
+		Serial.println("OK Button Pressed");
+	}
+
+	if (cancelButton->isPressed()) {
+		Serial.println("Cancel button pressed");
+	}
 }

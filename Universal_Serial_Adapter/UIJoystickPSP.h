@@ -9,43 +9,45 @@
  */
 
 // PSP joystick tracking
-long pspUpCount = 0; // Used to slow down how fast we repeat up movement
-long pspDownCount = 0; // Used to slow down how fast we repeat down movement
+int pspUpCount = 0; // Used to slow down how fast we repeat up movement
+int pspDownCount = 0; // Used to slow down how fast we repeat down movement
 int pspXAxisValue;
 int pspYAxisValue;
 
-// Read the x/y values from the joystick
-  pspXAxisValue=map(analogRead(pspXPin), 0, 1023, 0, 10);
-  pspYAxisValue=map(analogRead(pspYPin), 0, 1023, 0, 10);
+// void readPSPValues() {
+// // Read the x/y values from the joystick
+//   pspXAxisValue=map(analogRead(pspXPin), 0, 1023, 0, 10);
+//   pspYAxisValue=map(analogRead(pspYPin), 0, 1023, 0, 10);
 
-  // Move cursor Up
-  if (pspYAxisValue > 6 ) {
-    pspUpCount++;
-    if (pspUpCount > 768) {
-      pspUpCount = 0;
-      serialmode newMode = (serialmode)(selectedMode - 1);
-      if (newMode >= 0) {
-        //FIXME: Re-enable once new LCD is online
-        //setSelection(newMode);
-      }
-    }
-  }
-  else {
-    pspUpCount = 0;
-  }
+//   // Move cursor Up
+//   if (pspYAxisValue > 6 ) {
+//     pspUpCount++;
+//     if (pspUpCount > 768) {
+//       pspUpCount = 0;
+//       serialmode newMode = (serialmode)(selectedMode - 1);
+//       if (newMode >= 0) {
+//         //FIXME: Re-enable once new LCD is online
+//         //setSelection(newMode);
+//       }
+//     }
+//   }
+//   else {
+//     pspUpCount = 0;
+//   }
 
-  // Move cursor Down
-  if (pspYAxisValue < 4 ) {
-    pspDownCount++;
-    if (pspDownCount > 768) {
-      serialmode newMode = (serialmode)(selectedMode + 1);
-      if (newMode <= modelinespeed) {
-        //FIXME: Re-enable once new LCD is online
-        //setSelection(newMode);
-      }
-      pspDownCount = 0;
-    }
-  }
-  else {
-    pspDownCount = 0;
-  }
+//   // Move cursor Down
+//   if (pspYAxisValue < 4 ) {
+//     pspDownCount++;
+//     if (pspDownCount > 768) {
+//       serialmode newMode = (serialmode)(selectedMode + 1);
+//       if (newMode <= modelinespeed) {
+//         //FIXME: Re-enable once new LCD is online
+//         //setSelection(newMode);
+//       }
+//       pspDownCount = 0;
+//     }
+//   }
+//   else {
+//     pspDownCount = 0;
+//   }
+// }

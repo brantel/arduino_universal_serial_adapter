@@ -11,11 +11,13 @@
 #ifndef Project_h
 #define Project_h
 
+#define DEBUG true // For controlling debug output via serial
+
 // Pinout / things that need configuration
-#define okButtonPin     23
-#define okButtonLed     22
-#define cancelButtonPin 25
-#define cancelButtonLed 24
+#define okButtonPin     22
+#define okButtonLed     23
+#define cancelButtonPin 24
+#define cancelButtonLed 25
 #define pspXPin         0 // After GND / @ edge
 #define pspYPin         1 // Between VCC and gnd
 // LCD Pinouts
@@ -56,7 +58,7 @@ enum voltage {
   onePointEight,
   threePointThree,
   five,
-  zero=-1
+  negOne=-1
 };
 
 extern char* voltageToText[];

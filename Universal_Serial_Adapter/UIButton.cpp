@@ -10,10 +10,12 @@
 
 #include "Arduino.h"
 #include "UIButton.h"
+#include "Project.h"
 
 UIButton::UIButton(int buttonPin, int ledPin) {
 	this->buttonPin = buttonPin;
 	this->ledPin = ledPin;
+	setup();
 }
 
 void UIButton::setup() {
@@ -24,13 +26,23 @@ void UIButton::setup() {
 }
 
 void UIButton::turnOnLed() {
+	if (DEBUG) {
+		Serial.print("Turning on pin: ");
+		Serial.println(ledPin);
+	}
 	digitalWrite(ledPin, HIGH);
 }
 
 void UIButton::turnOffLed() {
+	if (DEBUG) {
+		Serial.print("Turning off pin: ");
+		Serial.println(ledPin);
+	}
 	digitalWrite(ledPin, LOW);
 }
 
 bool UIButton::isPressed() {
-	return digitalRead(buttonPin);
+	bool pressed = digitalRead(buttonPin);
+	while (digitalRead(buttonPin)); // Wait for release
+	return pressed;
 }

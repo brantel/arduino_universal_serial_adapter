@@ -15,10 +15,10 @@ class UIButton {
 private:
 	int buttonPin;
 	int ledPin;
+	void setup();
 
 public:
 	UIButton(int buttonPin, int ledPin);
-	void setup();
 	void turnOnLed();
 	void turnOffLed();
 	bool isPressed();
