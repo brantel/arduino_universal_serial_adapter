@@ -7,3 +7,32 @@
  use this code however you'd like, just keep this license and
  attribute.
  */
+
+#include "Arduino.h"
+
+#include <Adafruit_GFX.h>
+#include <Adafruit_ST7735.h>
+#include <SD.h>
+#include <SPI.h>
+
+#include "Project.h"
+
+#ifndef UILCD_h
+#define UILCD_h
+
+#define BUFFPIXEL 20
+
+class UILCD {
+private:
+	Adafruit_ST7735* tft;
+
+	uint32_t read32(File f);
+	uint16_t read16(File f);
+
+public:
+	UILCD();
+	void bmpDraw(char *filename, uint8_t x, uint8_t y);
+	void splashScreen();
+};
+
+#endif
