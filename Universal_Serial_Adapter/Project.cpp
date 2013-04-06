@@ -12,10 +12,15 @@
 
 // Map a mode -> text value
 char* modeToText[4] = {
-  "Phone UART",
-  "DB9 - Normal",
+  "Serial TTL",
   "DB9 - Null Mdm",
   "Cisco console"
+};
+
+char* voltageToText[3] = {
+  "1.8V",
+  "3.3V",
+  "5.0V"
 };
 
 // Known and supported line speeds

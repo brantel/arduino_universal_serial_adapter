@@ -30,11 +30,9 @@
 // Serial modes supported
 //  Abused in for loops / lookup tables -- DO NOT CHANGE none or set values
 enum serialmode { 
-  phone,
-  db9_norm, 
+  ttl,
   db9_null, 
   cisco,
-  modelinespeed,
   none=-1
 };
 
@@ -54,6 +52,15 @@ enum linespeed {
   zero=-1
 };
 
+enum voltage {
+  onePointEight,
+  threePointThree,
+  five,
+  zero=-1
+};
+
+extern char* voltageToText[];
+
 // Description / speed scruct to use in lookup table
 struct linespeedinfo {
   char* description;
@@ -67,5 +74,8 @@ extern linespeedinfo linespeeds[];
 extern serialmode currentMode;
 extern serialmode selectedMode;
 extern linespeed currentLineSpeed;
+extern linespeed selectedLineSpeed;
+extern voltage currentVoltage;
+extern voltage selectedVoltage;
 
 #endif

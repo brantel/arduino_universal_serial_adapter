@@ -14,6 +14,9 @@
 serialmode currentMode = none;
 serialmode selectedMode = none;
 linespeed currentLineSpeed = zero;
+linespeed selectedLineSpeed = zero;
+voltage currentVoltage = zero;
+voltage selectedVoltage = zero;
 
 // Defaults
 void setDefaults() {
