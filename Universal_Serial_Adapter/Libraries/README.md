@@ -1,0 +1,1 @@
+The libraries contained here must be copied to ~/Arduino/Libraries in order for the project to build.  See the Arduino documentation for further information on library installation and setup.
