@@ -8,3 +8,17 @@
  attribute.
  */
 
+UI State machine (current element = config / stats / inline display of data)
+Configuration state machine (speed, pinout, logic level, sd card on/off, boot logo on/off)
+Message to config (element + new value)
+Message to UI (element + success/fail)
+
+// Button's controlling UI
+UIButton* okButton = new UIButton(22, 23);
+UIButton* cancelButton = new UIButton(24, 25);
+
+  // Select / Enter
+  if (okButton->isPressed()) {
+    //FIXME: Re-enable once new LCD is online
+    //setMode(selectedMode);
+  }

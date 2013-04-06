@@ -8,3 +8,7 @@
  attribute.
  */
 
+// Standard colors
+#define BACKGROUND  BLACK
+#define TEXT        GRAY
+#define HILIGHT     GOLD

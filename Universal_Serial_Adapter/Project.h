@@ -22,11 +22,6 @@
 // Don't change anything below here
 // -----------------------------------------------------------------------------
 
-// Standard colors
-#define BACKGROUND  BLACK
-#define TEXT        GRAY
-#define HILIGHT     GOLD
-
 // Serial modes supported
 //  Abused in for loops / lookup tables -- DO NOT CHANGE none or set values
 enum serialmode { 
