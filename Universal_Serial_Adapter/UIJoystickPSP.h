@@ -10,6 +10,9 @@
 
 #include "Project.h"
 
+#ifndef UIJoystickPSP_h
+#define UIJoystickPSP_h
+
 enum joyDirection { 
   joyUp,
   joyDown,
@@ -33,3 +36,5 @@ public:
 	UIJoystickPSP(int xAxisPin, int yAxisPin);
 	joyDirection direction();
 };
+
+#endif
