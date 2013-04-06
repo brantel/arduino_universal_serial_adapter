@@ -8,46 +8,28 @@
  attribute.
  */
 
-// PSP joystick tracking
-int pspUpCount = 0; // Used to slow down how fast we repeat up movement
-int pspDownCount = 0; // Used to slow down how fast we repeat down movement
-int pspXAxisValue;
-int pspYAxisValue;
+#include "Project.h"
 
-// void readPSPValues() {
-// // Read the x/y values from the joystick
-//   pspXAxisValue=map(analogRead(pspXPin), 0, 1023, 0, 10);
-//   pspYAxisValue=map(analogRead(pspYPin), 0, 1023, 0, 10);
+enum joyDirection { 
+  joyUp,
+  joyDown,
+  joyLeft,
+  joyRight,
+  joyNone=-1
+};
 
-//   // Move cursor Up
-//   if (pspYAxisValue > 6 ) {
-//     pspUpCount++;
-//     if (pspUpCount > 768) {
-//       pspUpCount = 0;
-//       serialmode newMode = (serialmode)(selectedMode - 1);
-//       if (newMode >= 0) {
-//         //FIXME: Re-enable once new LCD is online
-//         //setSelection(newMode);
-//       }
-//     }
-//   }
-//   else {
-//     pspUpCount = 0;
-//   }
+class UIJoystickPSP {
+private:
+	int xAxisPin, yAxisPin; // Pins in use
+	int xAxisValue, yAxisValue; // Values read from pins
+	int upCount, downCount, leftCount, rightCount; // Counts to slow down repeat
 
-//   // Move cursor Down
-//   if (pspYAxisValue < 4 ) {
-//     pspDownCount++;
-//     if (pspDownCount > 768) {
-//       serialmode newMode = (serialmode)(selectedMode + 1);
-//       if (newMode <= modelinespeed) {
-//         //FIXME: Re-enable once new LCD is online
-//         //setSelection(newMode);
-//       }
-//       pspDownCount = 0;
-//     }
-//   }
-//   else {
-//     pspDownCount = 0;
-//   }
-// }
+	joyDirection previousDirection;
+
+	// int readXAxisValue();
+	// int readYAxisValue();
+
+public:
+	UIJoystickPSP(int xAxisPin, int yAxisPin);
+	joyDirection direction();
+};

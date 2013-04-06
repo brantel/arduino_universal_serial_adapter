@@ -9,9 +9,12 @@
  */
 
 #include "Project.h"
+#include "UIButton.h"
+#include "UIJoystickPSP.h"
 
 UIButton* okButton;
 UIButton* cancelButton;
+UIJoystickPSP* pspJoystick;
 
 // Defaults
 void setDefaults() {
@@ -30,14 +33,13 @@ void setup() {
 
   okButton = new UIButton(okButtonPin, okButtonLed);
   cancelButton = new UIButton(cancelButtonPin, cancelButtonLed);
+  pspJoystick = new UIJoystickPSP(pspXPin, pspYPin);
 }
 
 void loop() {
-	if (okButton->isPressed()) {
-		Serial.println("OK Button Pressed");
-	}
-
-	if (cancelButton->isPressed()) {
-		Serial.println("Cancel button pressed");
+	int direction = pspJoystick->direction();
+	if (direction != joyNone) {
+		Serial.print("Joystick Direction: ");
+		Serial.println(direction);
 	}
 }
