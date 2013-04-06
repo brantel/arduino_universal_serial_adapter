@@ -7,8 +7,3 @@
  use this code however you'd like, just keep this license and
  attribute.
  */
-
-// Standard colors
-#define BACKGROUND  BLACK
-#define TEXT        GRAY
-#define HILIGHT     GOLD
