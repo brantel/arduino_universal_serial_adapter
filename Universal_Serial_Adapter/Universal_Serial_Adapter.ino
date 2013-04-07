@@ -51,6 +51,10 @@ void setup() {
 void loop() {
   joyStickEvent = pspJoystick->direction();
   if (joyStickEvent != joyNone) {
+    if (DEBUG) {
+      Serial.print("Joystick Event: ");
+      Serial.println(joyStickEvent);
+    }
     lcd->handleJoystickEvent(joyStickEvent);
   }
 }
