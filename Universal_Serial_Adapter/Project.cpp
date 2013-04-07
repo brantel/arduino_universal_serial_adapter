@@ -11,7 +11,7 @@
 #include "Project.h"
 
 // Map a mode -> text value
-char* modeToText[4] = {
+char* modeToText[3] = {
   "Serial TTL",
   "DB9 - Null Mdm",
   "Cisco console"

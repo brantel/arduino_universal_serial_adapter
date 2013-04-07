@@ -43,6 +43,7 @@ enum serialmode {
   ttl,
   db9_null, 
   cisco,
+  maxserialmode,
   none=-1
 };
 
@@ -66,6 +67,7 @@ enum voltage {
   onePointEight,
   threePointThree,
   five,
+  maxvoltage,
   negOne=-1
 };
 

@@ -57,5 +57,13 @@ void loop() {
     }
     lcd->handleJoystickEvent(joyStickEvent);
   }
+
+  if (okButton->isPressed()) {
+    lcd->handleOkButtonEvent();
+  }
+
+  if (cancelButton->isPressed()) {
+    lcd->handleCancelButtonEvent();
+  }
 }
 

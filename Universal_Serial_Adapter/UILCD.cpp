@@ -45,7 +45,65 @@ void UILCD::handleJoystickEvent(joyDirection direction) {
     case 1: // enum screen -> mainScreen
       mainScreenHilight(direction);
       break;
+    default: // config screens
+      configScreenHighlight(direction);
+      break;
   }
+}
+
+void UILCD::handleOkButtonEvent() {
+    if (DEBUG) {
+    Serial.println("begin UILCD::handleOkButtonEvent");
+    Serial.print("Current Screen: ");
+    Serial.println(currentScreen);
+  }
+
+  switch (currentScreen) {
+    case 1: // enum screen -> mainScreen
+      mainScreenOkButton();
+      break;
+  }
+}
+
+void UILCD::handleCancelButtonEvent() {
+    if (DEBUG) {
+    Serial.println("begin UILCD::handleCancelButtonEvent");
+    Serial.print("Current Screen: ");
+    Serial.println(currentScreen);
+  }
+
+  switch (currentScreen) {
+    case 1: // enum screen -> mainScreen
+      mainScreenCancelButton();
+      break;
+    default:
+      drawMainScreen();
+      break;
+  }
+}
+
+void UILCD::mainScreenOkButton() {
+  switch(currentLine) {
+    case 0: // Connection Type
+      drawConnectionScreen();
+      break;
+    case 1: // Line speed
+      drawLineSpeedScreen();
+      break;
+    case 2: // Voltage
+      drawVoltageScreen();
+      break;
+    // case 4: // start data log
+    //   break;
+    // case 5: // view serial data
+    //   break;
+    // case 7: // configure rtc
+    //   break;
+  }
+}
+
+void UILCD::mainScreenCancelButton() {
+  // Do nothing for now
 }
 
 void UILCD::unHilightLine(int line) {
@@ -62,43 +120,148 @@ void UILCD::hilightLine(int line) {
 void UILCD::mainScreenHilight(joyDirection direction) {
   if (direction == joyUp) {
     // Don't go up past the 1st line
-    if (previousLine == 0) {
+    if (currentLine == 0) {
       return;
     }
-    unHilightLine(previousLine);
+    unHilightLine(currentLine);
 
-    previousLine -= 1;
+    currentLine -= 1;
 
     // Skip blank lines
-    if (previousLine == 3 || previousLine == 6) {
-      previousLine -= 1;
+    if (currentLine == 3 || currentLine == 6) {
+      currentLine -= 1;
     }
 
-    hilightLine(previousLine);
+    hilightLine(currentLine);
   }
 
   if (direction == joyDown) {
     // Don't go past the last line
-    if (previousLine == 7) {
+    if (currentLine == 7) {
       return;
     }
-    unHilightLine(previousLine);
+    unHilightLine(currentLine);
 
-    previousLine += 1;
+    currentLine += 1;
 
     // Skip blank lines
-    if (previousLine == 3 || previousLine == 6) {
-      previousLine += 1;
+    if (currentLine == 3 || currentLine == 6) {
+      currentLine += 1;
     }
 
-    hilightLine(previousLine);
+    hilightLine(currentLine);
   }
+}
+
+void UILCD::configScreenHighlight(joyDirection direction) {
+  if (direction == joyUp) {
+    // Don't go up past the 1st line
+    if (currentLine == 3) {
+      return;
+    }
+    unHilightLine(currentLine);
+
+    currentLine -= 1;
+
+    hilightLine(currentLine);
+  }
+
+  if (direction == joyDown) {
+    // Don't go past the last line
+    switch (currentScreen) {
+      case 2: // connectionScreen
+        if (currentLine == maxserialmode + 2) {
+          return;
+        }
+        break;
+      case 3: // lineSpeedScreen
+        if (currentLine == maxlinespeed + 2) {
+          return;
+        }
+        break;
+      case 4: // voltageScreen
+        if (currentLine == maxvoltage + 2) {
+          return;
+        }
+        break;
+    }
+
+    unHilightLine(currentLine);
+
+    currentLine += 1;
+
+    hilightLine(currentLine);
+  }
+}
+
+void UILCD::drawConnectionScreen() {
+  currentScreen = connectionScreen;
+  currentLine = 3;
+
+  tft->setCursor(0,0);
+  tft->fillScreen(BACKGROUND);
+  tft->setTextColor(TEXT);
+  tft->setTextWrap(true);
+
+  tft->println("Type Selection");
+  tft->println("  Current value is yellow");
+  tft->println();
+
+  for (int i=0; i<maxserialmode; i++) {
+    tft->print(" ");
+    tft->println(modeToText[i]);
+  }
+
+  hilightLine(3);
+}
+
+void UILCD::drawLineSpeedScreen() {
+  currentScreen = lineSpeedScreen;
+  currentLine = 3;
+
+  tft->setCursor(0,0);
+  tft->fillScreen(BACKGROUND);
+  tft->setTextColor(TEXT);
+  tft->setTextWrap(true);
+
+  tft->println("Speed Selection");
+  tft->println("  Current value is yellow");
+  tft->println();
+
+  for (int i=0; i<maxlinespeed; i++) {
+    tft->print(" ");
+    tft->println(linespeeds[i].description);
+  }
+
+  hilightLine(3);
+}
+
+void UILCD::drawVoltageScreen() {
+  currentScreen = voltageScreen;
+  currentLine = 3;
+
+  tft->setCursor(0,0);
+  tft->fillScreen(BACKGROUND);
+  tft->setTextColor(TEXT);
+  tft->setTextWrap(true);
+
+  tft->println("Voltage Selection");
+  tft->println("  Current value is yellow");
+  tft->println();
+
+  for (int i=0; i<maxvoltage; i++) {
+    tft->print(" ");
+    tft->println(voltageToText[i]);
+  }
+
+  hilightLine(3);
 }
 
 void UILCD::drawMainScreen() {
   currentScreen = mainScreen;
-  previousLine = 0;
+  currentLine = 0;
 
+  tft->setCursor(0,0);
   tft->fillScreen(BACKGROUND);
   tft->setTextColor(TEXT);
   tft->setTextWrap(true);
@@ -121,6 +284,7 @@ void UILCD::drawMainScreen() {
 }
 
 void UILCD::drawSplashScreen() {
+  tft->setCursor(0,0);
 	tft->fillScreen(SPLASH_BACKGROUND);
 	bmpDraw("splash.bmp", 13, 0);
   delay(1250);

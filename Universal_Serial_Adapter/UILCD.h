@@ -25,14 +25,17 @@
 
 enum screen {
 	splashScreen,
-	mainScreen
+	mainScreen,
+	connectionScreen,
+	lineSpeedScreen,
+	voltageScreen
 };
 
 class UILCD {
 private:
 	Adafruit_ST7735* tft;
 
-	int previousLine;
+	int currentLine;
 	screen currentScreen;
 
 	uint32_t read32(File f);
@@ -40,15 +43,23 @@ private:
 
 	void drawSplashScreen();
 	void drawMainScreen();
+	void drawConnectionScreen();
+	void drawLineSpeedScreen();
+	void drawVoltageScreen();
 	void hilightLine(int line);
 	void unHilightLine(int line);
 	void mainScreenHilight(joyDirection direction);
+	void configScreenHighlight(joyDirection direction);
+	void mainScreenOkButton();
+	void mainScreenCancelButton();
 
 public:
 	UILCD();
 	void bmpDraw(char *filename, uint8_t x, uint8_t y);
 	void startUI();
 	void handleJoystickEvent(joyDirection aDirection);
+	void handleOkButtonEvent();
+	void handleCancelButtonEvent();
 };
 
 #endif
