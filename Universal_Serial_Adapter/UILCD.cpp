@@ -17,6 +17,7 @@
 
 #include "Project.h"
 #include "UILCD.h"
+#include "UIJoystickPSP.h"
 
 UILCD::UILCD() {
 	tft = new Adafruit_ST7735(LCD_CS, LCD_DC, LCD_RST);
@@ -28,9 +29,99 @@ UILCD::UILCD() {
 	}
 }
 
+void UILCD::startUI() {
+  splashScreen();
+  mainScreen();
+}
+
+void UILCD::handleJoystickEvent(joyDirection direction) {
+  switch (currentScreen) {
+    case 1: // enum screen -> mainScreen
+      mainScreenHilight(direction);
+      break;
+  }
+}
+
+void UILCD::unHilightLine(int line) {
+  tft->setCursor(0, line * FONT_HEIGHT);
+  tft->setTextColor(HILIGHT);
+  tft->print(" ");
+}
+
+void UILCD::hilightLine(int line) {
+  tft->setCursor(0, line * FONT_HEIGHT);
+  tft->setTextColor(HILIGHT);
+  tft->print("*");
+}
+
+void UILCD::mainScreenHilight(joyDirection direction) {
+  if (direction == joyUp) {
+    // Don't go up past the 1st line
+    if (previousLine == 0) {
+      return;
+    }
+    unHilightLine(previousLine);
+
+    previousLine -= 1;
+
+    // Skip blank lines
+    if (previousLine == 3 || previousLine == 6) {
+      previousLine -= 1;
+    }
+
+    hilightLine(previousLine);
+  }
+
+  if (direction == joyDown) {
+    // Don't go past the last line
+    if (previousLine == 7) {
+      return;
+    }
+    unHilightLine(previousLine);
+
+    previousLine += 1;
+
+    // Skip blank lines
+    if (previousLine == 3 || previousLine == 6) {
+      previousLine += 1;
+    }
+
+    hilightLine(previousLine);
+  }
+}
+
+void UILCD::mainScreen() {
+  previousLine = 0;
+
+  tft->fillScreen(BACKGROUND);
+  tft->setTextColor(TEXT);
+  tft->setTextWrap(true);
+  
+  tft->print(" Con Typ: ");
+  tft->println(modeToText[1]); // TODO: This should be pulled from the config
+  tft->print(" Line Speed: ");
+  tft->println(linespeeds[4].description); // TODO: This should be pulled out from the config
+  tft->print(" Voltage (TTL Only): "); // TODO: Show this only if in TTL mode
+  tft->println(voltageToText[2]); // TODO: This should be pulled from the config
+  
+  tft->println();
+  tft->println(" Start data logging");
+  tft->println(" View serial data");
+  
+  tft->println();
+  tft->println(" Configure RTC / Clock");
+
+  hilightLine(0);
+}
+
 void UILCD::splashScreen() {
-	tft->fillScreen(ST7735_WHITE);
+	tft->fillScreen(SPLASH_BACKGROUND);
 	bmpDraw("splash.bmp", 13, 0);
+  delay(1250);
+  for (int16_t y=0; y < tft->height(); y+=1) {
+    tft->drawFastHLine(0, y, tft->width(), BACKGROUND);
+    delay(10);
+  }
 }
 
 void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
@@ -134,6 +225,7 @@ void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
             r = sdbuffer[buffidx++];
             tft->pushColor(tft->Color565(r,g,b));
           } // end pixel
+          delay(5);
         } // end scanline
         Serial.print("Loaded in ");
         Serial.print(millis() - startTime);

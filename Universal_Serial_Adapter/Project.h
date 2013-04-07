@@ -26,8 +26,16 @@
 #define LCD_DC   9  // Data/command line for TFT
 #define LCD_RST  8  // Reset line for TFT (or connect to +5V)
 
+#define SPLASH_BACKGROUND ST7735_WHITE
+#define BACKGROUND        ST7735_BLACK
+#define TEXT              ST7735_WHITE
+#define HILIGHT           ST7735_YELLOW
+
 // Don't change anything below here
 // -----------------------------------------------------------------------------
+
+#define FONT_WIDTH  6
+#define FONT_HEIGHT 8
 
 // Serial modes supported
 //  Abused in for loops / lookup tables -- DO NOT CHANGE none or set values

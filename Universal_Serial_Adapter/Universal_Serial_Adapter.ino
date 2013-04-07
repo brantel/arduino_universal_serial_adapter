@@ -23,6 +23,8 @@ UIButton* cancelButton;
 UIJoystickPSP* pspJoystick;
 UILCD* lcd;
 
+joyDirection joyStickEvent;
+
 // Defaults
 void setDefaults() {
   //FIXME: Re-enable once new LCD is online
@@ -43,9 +45,13 @@ void setup() {
   pspJoystick = new UIJoystickPSP(pspXPin, pspYPin);
 
   lcd = new UILCD();
-  lcd->splashScreen();
+  lcd->startUI();
 }
 
 void loop() {
+  joyStickEvent = pspJoystick->direction();
+  if (joyStickEvent != joyNone) {
+    lcd->handleJoystickEvent(joyStickEvent);
+  }
 }
 
