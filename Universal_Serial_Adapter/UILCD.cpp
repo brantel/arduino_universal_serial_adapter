@@ -20,6 +20,8 @@
 #include "UIJoystickPSP.h"
 
 UILCD::UILCD(Config* config) {
+  pinMode(LCD_LITE, OUTPUT);
+
   this->config = config;
 
 	tft = new Adafruit_ST7735(LCD_CS, LCD_DC, LCD_RST);
@@ -31,9 +33,17 @@ UILCD::UILCD(Config* config) {
 	}
 }
 
-void UILCD::startUI() {
+void UILCD::start() {
   drawSplashScreen();
   drawMainScreen();
+}
+
+void UILCD::turnOn() {
+  digitalWrite(LCD_LITE, HIGH);
+}
+
+void UILCD::turnOff() {
+  digitalWrite(LCD_LITE, LOW);
 }
 
 void UILCD::handleJoystickEvent(joyDirection direction) {

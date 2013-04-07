@@ -13,20 +13,19 @@
 #include "UIButton.h"
 #include "UIJoystickPSP.h"
 #include "UILCD.h"
+#include "UI.h"
 
 #include <Adafruit_GFX.h>
 #include <Adafruit_ST7735.h>
 #include <SD.h>
 #include <SPI.h>
 
-UILCD* lcd;
+#include <Metro.h>
+
+UI* ui;
 Config* config;
 
-UIButton* okButton;
-UIButton* cancelButton;
-UIJoystickPSP* pspJoystick;
-
-joyDirection joyStickEvent;
+Metro* uiTimeout;
 
 void setup() {
   Serial.begin(9600);
@@ -35,30 +34,17 @@ void setup() {
   config = new Config();
   config->setDefaults();
 
-  okButton = new UIButton(okButtonPin, okButtonLed);
-  cancelButton = new UIButton(cancelButtonPin, cancelButtonLed);
-  pspJoystick = new UIJoystickPSP(pspXPin, pspYPin);
-
-  lcd = new UILCD(config);
-  lcd->startUI();
+  ui = new UI(config);
+  
+  uiTimeout = new Metro(config->getTimeoutMilis(), false);
 }
 
 void loop() {
-  joyStickEvent = pspJoystick->direction();
-  if (joyStickEvent != joyNone) {
-    if (DEBUG) {
-      Serial.print("Joystick Event: ");
-      Serial.println(joyStickEvent);
-    }
-    lcd->handleJoystickEvent(joyStickEvent);
+  // FIXME: Move timer to UI under its own method
+  if (uiTimeout->check()) {
+    ui->disableUI();
   }
 
-  if (okButton->isPressed()) {
-    lcd->handleOkButtonEvent();
-  }
-
-  if (cancelButton->isPressed()) {
-    lcd->handleCancelButtonEvent();
-  }
+  ui->processInputEvents();
 }
 

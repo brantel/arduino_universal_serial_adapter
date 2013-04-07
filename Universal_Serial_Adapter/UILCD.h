@@ -60,10 +60,12 @@ private:
 public:
 	UILCD(Config* config);
 	void bmpDraw(char *filename, uint8_t x, uint8_t y);
-	void startUI();
 	void handleJoystickEvent(joyDirection aDirection);
 	void handleOkButtonEvent();
 	void handleCancelButtonEvent();
+	void turnOff();
+	void turnOn();
+	void start();
 };
 
 #endif

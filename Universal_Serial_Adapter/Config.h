@@ -20,6 +20,9 @@ private:
 	linespeed currentLineSpeed;
 	ttlvoltage currentVoltage;
 	timeout currentTimeout;
+	bool uiEnabled;
+
+
 
 public:
 	Config();
@@ -32,6 +35,10 @@ public:
 	linespeed getLineSpeed();
 	ttlvoltage getVoltage();
 	timeout getTimeout();
+	long getTimeoutMilis();
+	void disableUI();
+	void enableUI();
+	bool isUIEnabled();
 };
 
 #endif

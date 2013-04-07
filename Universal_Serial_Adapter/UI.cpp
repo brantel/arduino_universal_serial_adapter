@@ -7,4 +7,68 @@
  use this code however you'd like, just keep this license and
  attribute.
  */
- 
+
+#include "Project.h"
+#include "UI.h"
+
+UI::UI(Config* aConfig) {
+	config = aConfig;
+
+	okButton = new UIButton(okButtonPin, okButtonLed);
+	cancelButton = new UIButton(cancelButtonPin, cancelButtonLed);
+	pspJoystick = new UIJoystickPSP(pspXPin, pspYPin);
+
+	lcd = new UILCD(config);
+
+	startUI();
+}
+
+void UI::startUI() {
+	enableUI();
+	lcd->start();
+}
+
+void UI::disableUI() {
+	config->disableUI();
+	lcd->turnOff();
+	okButton->turnOffLed();
+	cancelButton->turnOffLed();
+}
+
+void UI::enableUI() {
+	config->enableUI();
+	lcd->turnOn();
+	okButton->turnOnLed();
+	cancelButton->turnOnLed();
+}
+
+void UI::processInputEvents() {
+	joyStickEvent = pspJoystick->direction();
+	if (joyStickEvent != joyNone) {
+		if (!config->isUIEnabled()) {
+			enableUI();
+			return;
+		}
+		if (DEBUG) {
+			Serial.print("Joystick Event: ");
+			Serial.println(joyStickEvent);
+		}
+		lcd->handleJoystickEvent(joyStickEvent);
+	}
+
+	if (okButton->isPressed()) {
+		if (!config->isUIEnabled()) {
+			enableUI();
+			return;
+		}
+		lcd->handleOkButtonEvent();
+	}
+
+	if (cancelButton->isPressed()) {
+		if (!config->isUIEnabled()) {
+			enableUI();
+			return;
+		}
+		lcd->handleCancelButtonEvent();
+	}
+}

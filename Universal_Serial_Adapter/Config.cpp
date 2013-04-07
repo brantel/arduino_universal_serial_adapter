@@ -18,6 +18,18 @@ Config::Config() {
 	currentTimeout = never;
 }
 
+bool Config::isUIEnabled() {
+	return uiEnabled;
+}
+
+void Config::enableUI() {
+	uiEnabled = true;
+}
+
+void Config::disableUI() {
+	uiEnabled = false;
+}
+
 serialmode Config::getSerialMode() {
 	return currentMode;
 }
@@ -32,6 +44,20 @@ ttlvoltage Config::getVoltage() {
 
 timeout Config::getTimeout() {
 	return currentTimeout;
+}
+
+long Config::getTimeoutMilis() {
+	switch (currentTimeout) {
+		case 0: // tenseconds
+			return 10000;
+  		case 1: // thirtyseconds
+  			return 30000;
+  		case 2: // oneminute
+  			return 60000;
+  		case 3: // fiveminutes
+  			return 300000;
+  	}
+  	return -1;
 }
 
 void Config::setMode(serialmode mode) {

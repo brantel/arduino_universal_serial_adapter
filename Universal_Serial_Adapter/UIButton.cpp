@@ -21,8 +21,6 @@ UIButton::UIButton(int buttonPin, int ledPin) {
 void UIButton::setup() {
 	pinMode(buttonPin, INPUT);
 	pinMode(ledPin, OUTPUT);
-	
-	turnOnLed();
 }
 
 void UIButton::turnOnLed() {

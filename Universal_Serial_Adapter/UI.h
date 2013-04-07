@@ -16,3 +16,31 @@
 // Button's controlling UI
 // UIButton* okButton = new UIButton(22, 23);
 // UIButton* cancelButton = new UIButton(24, 25);
+
+#include "Project.h"
+#include "UIButton.h"
+#include "UIJoystickPSP.h"
+#include "UILCD.h"
+#include "Config.h"
+
+class UI {
+private:
+	UIButton* okButton;
+	UIButton* cancelButton;
+	UIJoystickPSP* pspJoystick;
+
+	joyDirection joyStickEvent;
+
+	UILCD* lcd;
+
+	Config* config;
+
+public:
+	UI(Config* aConfig);
+	void startUI();
+
+	void processInputEvents();
+
+	void disableUI();
+	void enableUI();
+};
