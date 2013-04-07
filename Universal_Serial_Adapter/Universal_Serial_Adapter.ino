@@ -9,6 +9,7 @@
  */
 
 #include "Project.h"
+#include "Config.h"
 #include "UIButton.h"
 #include "UIJoystickPSP.h"
 #include "UILCD.h"
@@ -18,33 +19,29 @@
 #include <SD.h>
 #include <SPI.h>
 
+UILCD* lcd;
+Config* config;
+
 UIButton* okButton;
 UIButton* cancelButton;
 UIJoystickPSP* pspJoystick;
-UILCD* lcd;
 
 joyDirection joyStickEvent;
 
-// Defaults
-void setDefaults() {
-  //FIXME: Re-enable once new LCD is online
-  //setMode(phone);
-  //setSelection(phone);
-  //setLineSpeed(oneNineteenTwoK);
-}
+
 
 void setup() {
   Serial.begin(9600);
   Serial.println("Setup!");
 
-  // Setup defaults
-  setDefaults();
+  config = new Config();
+  config->setDefaults();
 
   okButton = new UIButton(okButtonPin, okButtonLed);
   cancelButton = new UIButton(cancelButtonPin, cancelButtonLed);
   pspJoystick = new UIJoystickPSP(pspXPin, pspYPin);
 
-  lcd = new UILCD();
+  lcd = new UILCD(config);
   lcd->startUI();
 }
 

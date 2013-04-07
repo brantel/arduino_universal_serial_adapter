@@ -19,7 +19,9 @@
 #include "UILCD.h"
 #include "UIJoystickPSP.h"
 
-UILCD::UILCD() {
+UILCD::UILCD(Config* config) {
+  this->config = config;
+
 	tft = new Adafruit_ST7735(LCD_CS, LCD_DC, LCD_RST);
 	tft->initR(INITR_BLACKTAB);
 	tft->setRotation(3);
@@ -62,6 +64,18 @@ void UILCD::handleOkButtonEvent() {
     case 1: // enum screen -> mainScreen
       mainScreenOkButton();
       break;
+    case 2: // connectionScreen
+      config->setMode((serialmode)(currentLine - 3));
+      drawConnectionScreen(true);
+      break;
+    case 3: // lineSpeedScreen
+      config->setLineSpeed((linespeed)(currentLine - 3));
+      drawLineSpeedScreen(true);
+      break;
+    case 4: // voltageScreen
+      config->setVoltage((ttlvoltage)(currentLine - 3));
+      drawVoltageScreen(true);
+      break;
   }
 }
 
@@ -85,13 +99,13 @@ void UILCD::handleCancelButtonEvent() {
 void UILCD::mainScreenOkButton() {
   switch(currentLine) {
     case 0: // Connection Type
-      drawConnectionScreen();
+      drawConnectionScreen(false);
       break;
     case 1: // Line speed
-      drawLineSpeedScreen();
+      drawLineSpeedScreen(false);
       break;
     case 2: // Voltage
-      drawVoltageScreen();
+      drawVoltageScreen(false);
       break;
     // case 4: // start data log
     //   break;
@@ -128,8 +142,17 @@ void UILCD::mainScreenHilight(joyDirection direction) {
     currentLine -= 1;
 
     // Skip blank lines
-    if (currentLine == 3 || currentLine == 6) {
-      currentLine -= 1;
+    if (config->getSerialMode() == ttl) {
+      Serial.println("Serial ttl blank line skip");
+      if (currentLine == 3 || currentLine == 6) {
+        currentLine -= 1;
+      }
+    }
+    else {
+      Serial.println("Non-serial ttl blank line skip");
+      if (currentLine == 2 || currentLine == 5) {
+        currentLine -= 1;
+      }
     }
 
     hilightLine(currentLine);
@@ -137,16 +160,32 @@ void UILCD::mainScreenHilight(joyDirection direction) {
 
   if (direction == joyDown) {
     // Don't go past the last line
-    if (currentLine == 7) {
-      return;
+    if (config->getSerialMode() == ttl) {
+      if (currentLine == 8) {
+        return;
+      }
+    }
+    else {
+      if (currentLine == 7) {
+        return;
+      }
     }
     unHilightLine(currentLine);
 
     currentLine += 1;
 
     // Skip blank lines
-    if (currentLine == 3 || currentLine == 6) {
-      currentLine += 1;
+    if (config->getSerialMode() == ttl) {
+      Serial.println("Serial ttl blank line skip");
+      if (currentLine == 3 || currentLine == 6) {
+        currentLine += 1;
+      }
+    }
+    else {
+      Serial.println("Non-serial ttl blank line skip");
+      if (currentLine == 2 || currentLine == 5) {
+        currentLine += 1;
+      }
     }
 
     hilightLine(currentLine);
@@ -194,9 +233,11 @@ void UILCD::configScreenHighlight(joyDirection direction) {
   }
 }
 
-void UILCD::drawConnectionScreen() {
+void UILCD::drawConnectionScreen(bool keepCurrentLine) {
   currentScreen = connectionScreen;
-  currentLine = 3;
+  if (!keepCurrentLine) {
+    currentLine = 3;
+  }
 
   tft->setCursor(0,0);
   tft->fillScreen(BACKGROUND);
@@ -208,16 +249,27 @@ void UILCD::drawConnectionScreen() {
   tft->println();
 
   for (int i=0; i<maxserialmode; i++) {
+    if (config->getSerialMode() == i) {
+      tft->setTextColor(HILIGHT);
+    }
     tft->print(" ");
     tft->println(modeToText[i]);
+    tft->setTextColor(TEXT);
   }
 
-  hilightLine(3);
+  if (keepCurrentLine) {
+    hilightLine(currentLine);
+  }
+  else {
+    hilightLine(3);
+  }
 }
 
-void UILCD::drawLineSpeedScreen() {
+void UILCD::drawLineSpeedScreen(bool keepCurrentLine) {
   currentScreen = lineSpeedScreen;
-  currentLine = 3;
+  if (!keepCurrentLine) {
+    currentLine = 3;
+  }
 
   tft->setCursor(0,0);
   tft->fillScreen(BACKGROUND);
@@ -229,16 +281,27 @@ void UILCD::drawLineSpeedScreen() {
   tft->println();
 
   for (int i=0; i<maxlinespeed; i++) {
+    if (config->getLineSpeed() == i) {
+      tft->setTextColor(HILIGHT);
+    }
     tft->print(" ");
     tft->println(linespeeds[i].description);
+    tft->setTextColor(TEXT);
   }
 
-  hilightLine(3);
+  if (keepCurrentLine) {
+    hilightLine(currentLine);
+  }
+  else {
+    hilightLine(3);
+  }
 }
 
-void UILCD::drawVoltageScreen() {
+void UILCD::drawVoltageScreen(bool keepCurrentLine) {
   currentScreen = voltageScreen;
-  currentLine = 3;
+  if (!keepCurrentLine) {
+    currentLine = 3;
+  }
 
   tft->setCursor(0,0);
   tft->fillScreen(BACKGROUND);
@@ -250,11 +313,20 @@ void UILCD::drawVoltageScreen() {
   tft->println();
 
   for (int i=0; i<maxvoltage; i++) {
+    if (config->getVoltage() == i) {
+      tft->setTextColor(HILIGHT);
+    }
     tft->print(" ");
     tft->println(voltageToText[i]);
+    tft->setTextColor(TEXT);
   }
 
-  hilightLine(3);
+  if (keepCurrentLine) {
+    hilightLine(currentLine);
+  }
+  else {
+    hilightLine(3);
+  }
 }
 
 void UILCD::drawMainScreen() {
@@ -267,11 +339,13 @@ void UILCD::drawMainScreen() {
   tft->setTextWrap(true);
   
   tft->print(" Con Typ: ");
-  tft->println(modeToText[1]); // TODO: This should be pulled from the config
+  tft->println(modeToText[config->getSerialMode()]); // TODO: This should be pulled from the config
   tft->print(" Line Speed: ");
-  tft->println(linespeeds[4].description); // TODO: This should be pulled out from the config
-  tft->print(" Voltage (TTL Only): "); // TODO: Show this only if in TTL mode
-  tft->println(voltageToText[2]); // TODO: This should be pulled from the config
+  tft->println(linespeeds[config->getLineSpeed()].description);
+  if (config->getSerialMode() == ttl) {
+    tft->print(" Voltage (TTL Only): ");
+    tft->println(voltageToText[config->getVoltage()]);
+  }
   
   tft->println();
   tft->println(" Start data logging");
@@ -279,6 +353,7 @@ void UILCD::drawMainScreen() {
   
   tft->println();
   tft->println(" Configure RTC / Clock");
+  tft->println(" Configure timeout");
 
   hilightLine(0);
 }

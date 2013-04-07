@@ -63,7 +63,7 @@ enum linespeed {
   zero=-1
 };
 
-enum voltage {
+enum ttlvoltage {
   onePointEight,
   threePointThree,
   five,
@@ -81,13 +81,5 @@ struct linespeedinfo {
 
 // Known and supported line speeds
 extern linespeedinfo linespeeds[];
-
-// Mode info needed
-extern serialmode currentMode;
-extern serialmode selectedMode;
-extern linespeed currentLineSpeed;
-extern linespeed selectedLineSpeed;
-extern voltage currentVoltage;
-extern voltage selectedVoltage;
 
 #endif

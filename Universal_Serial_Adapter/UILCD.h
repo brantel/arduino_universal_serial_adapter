@@ -17,6 +17,7 @@
 
 #include "Project.h"
 #include "UIJoystickPSP.h"
+#include "Config.h"
 
 #ifndef UILCD_h
 #define UILCD_h
@@ -34,6 +35,7 @@ enum screen {
 class UILCD {
 private:
 	Adafruit_ST7735* tft;
+	Config* config;
 
 	int currentLine;
 	screen currentScreen;
@@ -43,9 +45,9 @@ private:
 
 	void drawSplashScreen();
 	void drawMainScreen();
-	void drawConnectionScreen();
-	void drawLineSpeedScreen();
-	void drawVoltageScreen();
+	void drawConnectionScreen(bool keepCurrentLine);
+	void drawLineSpeedScreen(bool keepCurrentLine);
+	void drawVoltageScreen(bool keepCurrentLine);
 	void hilightLine(int line);
 	void unHilightLine(int line);
 	void mainScreenHilight(joyDirection direction);
@@ -54,7 +56,7 @@ private:
 	void mainScreenCancelButton();
 
 public:
-	UILCD();
+	UILCD(Config* config);
 	void bmpDraw(char *filename, uint8_t x, uint8_t y);
 	void startUI();
 	void handleJoystickEvent(joyDirection aDirection);
