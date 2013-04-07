@@ -38,8 +38,8 @@ private:
 	uint32_t read32(File f);
 	uint16_t read16(File f);
 
-	void splashScreen();
-	void mainScreen();
+	void drawSplashScreen();
+	void drawMainScreen();
 	void hilightLine(int line);
 	void unHilightLine(int line);
 	void mainScreenHilight(joyDirection direction);

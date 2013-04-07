@@ -30,11 +30,17 @@ UILCD::UILCD() {
 }
 
 void UILCD::startUI() {
-  splashScreen();
-  mainScreen();
+  drawSplashScreen();
+  drawMainScreen();
 }
 
 void UILCD::handleJoystickEvent(joyDirection direction) {
+  if (DEBUG) {
+    Serial.println("begin UILCD::handleJoystickEvent");
+    Serial.print("Current Screen: ");
+    Serial.println(currentScreen);
+  }
+
   switch (currentScreen) {
     case 1: // enum screen -> mainScreen
       mainScreenHilight(direction);
@@ -44,8 +50,7 @@ void UILCD::handleJoystickEvent(joyDirection direction) {
 
 void UILCD::unHilightLine(int line) {
   tft->setCursor(0, line * FONT_HEIGHT);
-  tft->setTextColor(HILIGHT);
-  tft->print(" ");
+  tft->fillRect(0, line * FONT_HEIGHT, FONT_WIDTH, FONT_HEIGHT, BACKGROUND);
 }
 
 void UILCD::hilightLine(int line) {
@@ -90,7 +95,8 @@ void UILCD::mainScreenHilight(joyDirection direction) {
   }
 }
 
-void UILCD::mainScreen() {
+void UILCD::drawMainScreen() {
+  currentScreen = mainScreen;
   previousLine = 0;
 
   tft->fillScreen(BACKGROUND);
@@ -114,7 +120,7 @@ void UILCD::mainScreen() {
   hilightLine(0);
 }
 
-void UILCD::splashScreen() {
+void UILCD::drawSplashScreen() {
 	tft->fillScreen(SPLASH_BACKGROUND);
 	bmpDraw("splash.bmp", 13, 0);
   delay(1250);
