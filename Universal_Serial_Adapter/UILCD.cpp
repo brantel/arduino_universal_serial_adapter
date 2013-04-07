@@ -76,6 +76,10 @@ void UILCD::handleOkButtonEvent() {
       config->setVoltage((ttlvoltage)(currentLine - 3));
       drawVoltageScreen(true);
       break;
+    case 5: // timeoutScreen
+      config->setTimeout((timeout)(currentLine - 3));
+      drawTimeoutScreen(true);
+      break;
   }
 }
 
@@ -113,6 +117,9 @@ void UILCD::mainScreenOkButton() {
     //   break;
     // case 7: // configure rtc
     //   break;
+    case 8:
+      drawTimeoutScreen(false);
+      break;
   }
 }
 
@@ -223,6 +230,11 @@ void UILCD::configScreenHighlight(joyDirection direction) {
           return;
         }
         break;
+      case 5: // timeoutScreen
+        if (currentLine == maxtimeout + 2) {
+          return;
+        }
+        break;
     }
 
     unHilightLine(currentLine);
@@ -230,6 +242,38 @@ void UILCD::configScreenHighlight(joyDirection direction) {
     currentLine += 1;
 
     hilightLine(currentLine);
+  }
+}
+
+void UILCD::drawTimeoutScreen(bool keepCurrentLine) {
+  currentScreen = timeoutscreen;
+  if (!keepCurrentLine) {
+    currentLine = 3;
+  }
+
+  tft->setCursor(0,0);
+  tft->fillScreen(BACKGROUND);
+  tft->setTextColor(TEXT);
+  tft->setTextWrap(true);
+
+  tft->println("Timout selection");
+  tft->println("  Current value is yellow");
+  tft->println();
+
+  for (int i=0; i<maxtimeout; i++) {
+    if (config->getTimeout() == i) {
+      tft->setTextColor(HILIGHT);
+    }
+    tft->print(" ");
+    tft->println(timeoutToText[i]);
+    tft->setTextColor(TEXT);
+  }
+
+  if (keepCurrentLine) {
+    hilightLine(currentLine);
+  }
+  else {
+    hilightLine(3);
   }
 }
 

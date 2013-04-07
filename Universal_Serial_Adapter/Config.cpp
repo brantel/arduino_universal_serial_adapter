@@ -15,6 +15,7 @@ Config::Config() {
 	currentMode = none;
 	currentLineSpeed = zero;
 	currentVoltage = negOne;
+	currentTimeout = never;
 }
 
 serialmode Config::getSerialMode() {
@@ -29,6 +30,10 @@ ttlvoltage Config::getVoltage() {
 	return currentVoltage;
 }
 
+timeout Config::getTimeout() {
+	return currentTimeout;
+}
+
 void Config::setMode(serialmode mode) {
 	currentMode = mode;
 }
@@ -41,8 +46,13 @@ void Config::setVoltage(ttlvoltage voltage) {
 	currentVoltage = voltage;
 }
 
+void Config::setTimeout(timeout aTimeout) {
+	currentTimeout = aTimeout;
+}
+
 void Config::setDefaults() {
 	setMode(ttl);
 	setLineSpeed(oneNineteenTwoK);
 	setVoltage(onePointEight);
+	setTimeout(thirtyseconds);
 }

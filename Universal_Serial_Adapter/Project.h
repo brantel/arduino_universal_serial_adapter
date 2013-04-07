@@ -82,4 +82,15 @@ struct linespeedinfo {
 // Known and supported line speeds
 extern linespeedinfo linespeeds[];
 
+enum timeout {
+  tenseconds,
+  thirtyseconds,
+  oneminute,
+  fiveminutes,
+  never,
+  maxtimeout
+};
+
+extern char* timeoutToText[];
+
 #endif

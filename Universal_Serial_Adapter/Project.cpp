@@ -32,3 +32,11 @@ linespeedinfo linespeeds[6] = {
   { "57.5k", 57600 },
   { "115k", 115200 }
 };
+
+char* timeoutToText[5] = {
+  "10s",
+  "30s",
+  "1m",
+  "5m",
+  "Never"
+};

@@ -29,7 +29,8 @@ enum screen {
 	mainScreen,
 	connectionScreen,
 	lineSpeedScreen,
-	voltageScreen
+	voltageScreen,
+	timeoutscreen
 };
 
 class UILCD {
@@ -48,6 +49,7 @@ private:
 	void drawConnectionScreen(bool keepCurrentLine);
 	void drawLineSpeedScreen(bool keepCurrentLine);
 	void drawVoltageScreen(bool keepCurrentLine);
+	void drawTimeoutScreen(bool keepCurrentLine);
 	void hilightLine(int line);
 	void unHilightLine(int line);
 	void mainScreenHilight(joyDirection direction);

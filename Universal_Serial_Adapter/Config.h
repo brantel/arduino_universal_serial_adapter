@@ -19,6 +19,7 @@ private:
 	serialmode currentMode;
 	linespeed currentLineSpeed;
 	ttlvoltage currentVoltage;
+	timeout currentTimeout;
 
 public:
 	Config();
@@ -26,9 +27,11 @@ public:
 	void setMode(serialmode mode);
 	void setLineSpeed(linespeed speed);
 	void setVoltage(ttlvoltage voltage);
+	void setTimeout(timeout aTimeout);
 	serialmode getSerialMode();
 	linespeed getLineSpeed();
 	ttlvoltage getVoltage();
+	timeout getTimeout();
 };
 
 #endif

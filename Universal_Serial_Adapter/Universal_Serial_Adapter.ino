@@ -28,8 +28,6 @@ UIJoystickPSP* pspJoystick;
 
 joyDirection joyStickEvent;
 
-
-
 void setup() {
   Serial.begin(9600);
   Serial.println("Setup!");
