@@ -8,6 +8,8 @@
  attribute.
  */
 
+#include <Metro.h>
+
 #include "Project.h"
 #include "UI.h"
 
@@ -19,6 +21,8 @@ UI::UI(Config* aConfig) {
 	pspJoystick = new UIJoystickPSP(pspXPin, pspYPin);
 
 	lcd = new UILCD(config);
+
+	uiTimeout = new Metro(config->getTimeoutMilis());
 
 	startUI();
 }
@@ -40,6 +44,13 @@ void UI::enableUI() {
 	lcd->turnOn();
 	okButton->turnOnLed();
 	cancelButton->turnOnLed();
+	uiTimeout->reset();
+}
+
+void UI::processTimeoutEvents() {
+	if (uiTimeout->check() == 1) {
+		disableUI();
+	}
 }
 
 void UI::processInputEvents() {

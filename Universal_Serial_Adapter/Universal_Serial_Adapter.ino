@@ -8,6 +8,8 @@
  attribute.
  */
 
+#include <Metro.h>
+
 #include "Project.h"
 #include "Config.h"
 #include "UIButton.h"
@@ -20,12 +22,8 @@
 #include <SD.h>
 #include <SPI.h>
 
-#include <Metro.h>
-
 UI* ui;
 Config* config;
-
-//Metro uiTimeout = Metro(250);
 
 void setup() {
   Serial.begin(9600);
@@ -35,16 +33,10 @@ void setup() {
   config->setDefaults();
 
   ui = new UI(config);
-  
-  //uiTimeout = Metro(config->getTimeoutMilis());
 }
 
 void loop() {
-  // FIXME: Move timer to UI under its own method
-  // if (uiTimeout.check() == 1) {
-  //   ui->disableUI();
-  // }
-
   ui->processInputEvents();
+  ui->processTimeoutEvents();
 }
 

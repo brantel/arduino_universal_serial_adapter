@@ -8,14 +8,7 @@
  attribute.
  */
 
-// UI State machine (current element = config / stats / inline display of data)
-// Configuration state machine (speed, pinout, logic level, sd card on/off, boot logo on/off)
-// Message to config (element + new value)
-// Message to UI (element + success/fail)
-
-// Button's controlling UI
-// UIButton* okButton = new UIButton(22, 23);
-// UIButton* cancelButton = new UIButton(24, 25);
+#include <Metro.h>
 
 #include "Project.h"
 #include "UIButton.h"
@@ -35,11 +28,14 @@ private:
 
 	Config* config;
 
+	Metro* uiTimeout;
+
 public:
 	UI(Config* aConfig);
 	void startUI();
 
 	void processInputEvents();
+	void processTimeoutEvents();
 
 	void disableUI();
 	void enableUI();
