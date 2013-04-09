@@ -22,7 +22,10 @@ private:
 	timeout currentTimeout;
 	bool uiEnabled;
 
-
+	const static int shiftOff = 0;
+	const static int shift18V = 1;
+	const static int shift33V = 2;
+	const static int shift50V = 4;
 
 public:
 	Config();

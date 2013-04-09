@@ -8,6 +8,8 @@
  attribute.
  */
 
+#include "Arduino.h"
+
 #include "Project.h"
 #include "Config.h"
 
@@ -70,6 +72,23 @@ void Config::setLineSpeed(linespeed speed) {
 
 void Config::setVoltage(ttlvoltage voltage) {
 	currentVoltage = voltage;
+	int shiftNumber = shiftOff;
+	switch (voltage) {
+		case 1: // onePointEight
+			shiftNumber = shift18V;
+			break;
+		case 2: // threePointThree
+			shiftNumber = shift33V;
+			break;
+		case 3: // five
+			shiftNumber = shift50V;
+			break;
+	}
+
+	// Use bit shifter to activate the proper voltage regulator
+	digitalWrite(shifterLatchPin, LOW);
+    shiftOut(shifterDataPin, shifterClockPin, MSBFIRST, shiftNumber);
+    digitalWrite(shifterLatchPin, HIGH);
 }
 
 void Config::setTimeout(timeout aTimeout) {

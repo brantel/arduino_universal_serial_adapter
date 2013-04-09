@@ -13,20 +13,27 @@
 
 #define DEBUG true // For controlling debug output via serial
 
-// Pinout / things that need configuration
+// Buttons / Joystick / Input Hardware Pinouts
 #define okButtonPin     22
 #define okButtonLed     23
 #define cancelButtonPin 24
 #define cancelButtonLed 25
 #define pspXPin         0 // After GND / @ edge
 #define pspYPin         1 // Between VCC and gnd
-// LCD Pinouts
+
+// LCD Pinout
 #define LCD_LITE 26 // Backlight pin
 #define SD_CS    7  // Chip select line for SD card
 #define LCD_CS  53  // Chip select line for TFT display
 #define LCD_DC   9  // Data/command line for TFT
 #define LCD_RST  8  // Reset line for TFT (or connect to +5V)
 
+// 74HC595 Bit Shifter Pinout
+#define shifterLatchPin 2 //Pin connected to ST_CP of 74HC595
+#define shifterClockPin 5 //Pin connected to SH_CP of 74HC595
+#define shifterDataPin  4 //Pin connected to DS of 74HC595
+
+// Colors / theme of UI
 #define SPLASH_BACKGROUND ST7735_WHITE
 #define BACKGROUND        ST7735_BLACK
 #define TEXT              ST7735_WHITE
