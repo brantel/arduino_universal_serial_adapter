@@ -26,9 +26,6 @@ UI* ui;
 Config* config;
 
 void setup() {
-  Serial.begin(9600);
-  Serial.println("Setup!");
-
   config = new Config();
   config->setDefaults();
 
