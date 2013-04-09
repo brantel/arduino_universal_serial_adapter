@@ -35,7 +35,7 @@ public:
 	linespeed getLineSpeed();
 	ttlvoltage getVoltage();
 	timeout getTimeout();
-	long getTimeoutMilis();
+	int getTimeoutMilis();
 	void disableUI();
 	void enableUI();
 	bool isUIEnabled();

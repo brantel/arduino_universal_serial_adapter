@@ -25,7 +25,7 @@
 UI* ui;
 Config* config;
 
-Metro* uiTimeout;
+//Metro uiTimeout = Metro(250);
 
 void setup() {
   Serial.begin(9600);
@@ -36,14 +36,14 @@ void setup() {
 
   ui = new UI(config);
   
-  uiTimeout = new Metro(config->getTimeoutMilis(), false);
+  //uiTimeout = Metro(config->getTimeoutMilis());
 }
 
 void loop() {
   // FIXME: Move timer to UI under its own method
-  if (uiTimeout->check()) {
-    ui->disableUI();
-  }
+  // if (uiTimeout.check() == 1) {
+  //   ui->disableUI();
+  // }
 
   ui->processInputEvents();
 }

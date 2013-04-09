@@ -46,7 +46,7 @@ timeout Config::getTimeout() {
 	return currentTimeout;
 }
 
-long Config::getTimeoutMilis() {
+int Config::getTimeoutMilis() {
 	switch (currentTimeout) {
 		case 0: // tenseconds
 			return 10000;
