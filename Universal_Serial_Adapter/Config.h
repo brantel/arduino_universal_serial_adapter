@@ -43,6 +43,7 @@ public:
 	void disableUI();
 	void enableUI();
 	bool isUIEnabled();
+	void processSerialData();
 };
 
 #endif

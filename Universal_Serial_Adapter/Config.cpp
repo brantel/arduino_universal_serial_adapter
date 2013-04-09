@@ -148,3 +148,38 @@ void Config::setDefaults() {
 	setMode(ttl);
 	setTimeout(thirtyseconds);
 }
+
+void Config::processSerialData() {
+	switch (currentMode) {
+		case 1: // ttl
+			if (Serial1.available()) {
+				int inByte = Serial1.read();
+				Serial.write(inByte);
+			}
+			if (Serial.available()) {
+				int inByte = Serial.read();
+				Serial1.write(inByte);
+			}
+			break;
+		case 2: // db9_null
+			if (Serial2.available()) {
+				int inByte = Serial2.read();
+				Serial.write(inByte);
+			}
+			if (Serial.available()) {
+				int inByte = Serial.read();
+				Serial2.write(inByte);
+			}
+			break;
+		case 3: // cisco
+			if (Serial3.available()) {
+				int inByte = Serial3.read();
+				Serial.write(inByte);
+			}
+			if (Serial.available()) {
+				int inByte = Serial.read();
+				Serial3.write(inByte);
+			}
+			break;
+	}
+}

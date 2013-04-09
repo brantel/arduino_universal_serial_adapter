@@ -33,7 +33,12 @@ void setup() {
 }
 
 void loop() {
+  // Serial data is processed at multiple points to prevent
+  //   UI code from interfering with communication
+  config->processSerialData();
   ui->processInputEvents();
+  config->processSerialData();
   ui->processTimeoutEvents();
+  config->processSerialData();
 }
 
