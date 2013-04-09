@@ -40,6 +40,29 @@ linespeed Config::getLineSpeed() {
 	return currentLineSpeed;
 }
 
+int Config::getLineSpeedBaud() {
+	switch (currentLineSpeed) {
+		case 1: // twentyFourHundredBaud
+			return 2400;
+			break;
+		case 2: // ninetySixHundredBaud
+			return 9600;
+			break;
+		case 3: // nineteenTwoK
+			return 19200;
+			break;
+		case 4: // thirtyeightFourK
+			return 38400;
+			break;
+		case 5: // fiftysevenFiveK
+			return 57600;
+			break;
+		case 6: // oneNineteenTwoK
+			return 119200;
+			break;
+	}
+}
+
 ttlvoltage Config::getVoltage() {
 	return currentVoltage;
 }
@@ -63,6 +86,30 @@ int Config::getTimeoutMilis() {
 }
 
 void Config::setMode(serialmode mode) {
+	switch (currentMode) {
+		case 1: // ttl
+			Serial1.end();
+			break;
+		case 2: // db9_null
+			Serial2.end();
+			break;
+		case 3: // cisco
+			Serial3.end();
+			break;
+	}
+
+	switch (mode) {
+		case 1: // ttl
+			Serial1.begin(getLineSpeedBaud());
+			break;
+		case 2: // db9_null
+			Serial2.begin(getLineSpeedBaud());
+			break;
+		case 3: // cisco
+			Serial3.begin(getLineSpeedBaud());
+			break;
+	}
+
 	currentMode = mode;
 }
 
@@ -96,8 +143,8 @@ void Config::setTimeout(timeout aTimeout) {
 }
 
 void Config::setDefaults() {
-	setMode(ttl);
-	setLineSpeed(oneNineteenTwoK);
 	setVoltage(onePointEight);
+	setLineSpeed(oneNineteenTwoK);
+	setMode(ttl);
 	setTimeout(thirtyseconds);
 }

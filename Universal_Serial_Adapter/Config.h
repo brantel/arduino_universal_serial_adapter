@@ -36,6 +36,7 @@ public:
 	void setTimeout(timeout aTimeout);
 	serialmode getSerialMode();
 	linespeed getLineSpeed();
+	int getLineSpeedBaud();
 	ttlvoltage getVoltage();
 	timeout getTimeout();
 	int getTimeoutMilis();
