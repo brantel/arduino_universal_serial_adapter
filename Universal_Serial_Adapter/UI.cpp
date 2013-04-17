@@ -14,6 +14,9 @@
 #include "UI.h"
 
 UI::UI(Config* aConfig) {
+	if (DEBUG) {
+		Serial.println("Config::UI()");
+	}
 	config = aConfig;
 
 	okButton = new UIButton(okButtonPin, okButtonLed);
@@ -28,11 +31,17 @@ UI::UI(Config* aConfig) {
 }
 
 void UI::startUI() {
+	if (DEBUG) {
+		Serial.println("Config::startUI()");
+	}
 	enableUI();
 	lcd->start();
 }
 
 void UI::disableUI() {
+	if (DEBUG) {
+		Serial.println("Config::disableUI()");
+	}
 	config->disableUI();
 	lcd->turnOff();
 	okButton->turnOffLed();
@@ -40,6 +49,9 @@ void UI::disableUI() {
 }
 
 void UI::enableUI() {
+	if (DEBUG) {
+		Serial.println("Config::enableUI()");
+	}
 	config->enableUI();
 	lcd->turnOn();
 	okButton->turnOnLed();

@@ -14,64 +14,103 @@
 #include "Config.h"
 
 Config::Config() {
+	if (DEBUG) {
+		Serial.println("Config::Config()");
+	}
 	currentMode = none;
 	currentLineSpeed = zero;
 	currentVoltage = negOne;
 	currentTimeout = never;
+
+	pinMode(voltagePinOnePointEight, OUTPUT);
+	pinMode(voltagePinThreePointThree, OUTPUT);
+	pinMode(voltagePinFivePointZero, OUTPUT);
+
+	if (DEBUG) {
+		Serial.begin(115200);
+	}
 }
 
 bool Config::isUIEnabled() {
+	if (DEBUG) {
+		Serial.println("Config::isUIEnabled()");
+	}
 	return uiEnabled;
 }
 
 void Config::enableUI() {
+	if (DEBUG) {
+		Serial.println("Config::enableUI()");
+	}
 	uiEnabled = true;
 }
 
 void Config::disableUI() {
+	if (DEBUG) {
+		Serial.println("Config::disableUI()");
+	}
 	uiEnabled = false;
 }
 
 serialmode Config::getSerialMode() {
+	if (DEBUG) {
+		Serial.println("Config::getSerialMode()");
+	}
 	return currentMode;
 }
 
 linespeed Config::getLineSpeed() {
+	if (DEBUG) {
+		Serial.println("Config::getLineSpeed()");
+	}
 	return currentLineSpeed;
 }
 
-int Config::getLineSpeedBaud() {
+float Config::getLineSpeedBaud() {
+	if (DEBUG) {
+		Serial.println("Config::getLineSpeedBaud()");
+	}
+
 	switch (currentLineSpeed) {
-		case 1: // twentyFourHundredBaud
+		case 0: // twentyFourHundredBaud
 			return 2400;
 			break;
-		case 2: // ninetySixHundredBaud
+		case 1: // ninetySixHundredBaud
 			return 9600;
 			break;
-		case 3: // nineteenTwoK
+		case 2: // nineteenTwoK
 			return 19200;
 			break;
-		case 4: // thirtyeightFourK
+		case 3: // thirtyeightFourK
 			return 38400;
 			break;
-		case 5: // fiftysevenFiveK
+		case 4: // fiftysevenFiveK
 			return 57600;
 			break;
-		case 6: // oneNineteenTwoK
-			return 119200;
+		case 5: // oneNineteenTwoK
+			return 115200;
 			break;
 	}
 }
 
 ttlvoltage Config::getVoltage() {
+	if (DEBUG) {
+		Serial.println("Config::getVoltage()");
+	}
 	return currentVoltage;
 }
 
 timeout Config::getTimeout() {
+	if (DEBUG) {
+		Serial.println("Config::getTimeout()");
+	}
 	return currentTimeout;
 }
 
 int Config::getTimeoutMilis() {
+	if (DEBUG) {
+		Serial.println("Config::getTimeoutMilis()");
+	}
 	switch (currentTimeout) {
 		case 0: // tenseconds
 			return 10000;
@@ -86,82 +125,107 @@ int Config::getTimeoutMilis() {
 }
 
 void Config::setMode(serialmode mode) {
+	if (DEBUG) {
+		Serial.println("Config::setMode()");
+		Serial.print("    Setting ttl line speed to:");
+		float baudrate = this->getLineSpeedBaud();
+		Serial.println(baudrate);
+	}
+
 	switch (currentMode) {
 		case 1: // ttl
-			Serial1.end();
+			Serial3.end();
 			break;
 		case 2: // db9_null
 			Serial2.end();
 			break;
 		case 3: // cisco
-			Serial3.end();
+			Serial1.end();
 			break;
 	}
 
 	switch (mode) {
-		case 1: // ttl
-			Serial1.begin(getLineSpeedBaud());
+		case 0: // ttl
+			Serial3.begin(getLineSpeedBaud());
 			break;
-		case 2: // db9_null
+		case 1: // db9_null
 			Serial2.begin(getLineSpeedBaud());
 			break;
-		case 3: // cisco
-			Serial3.begin(getLineSpeedBaud());
+		case 2: // cisco
+			Serial1.begin(getLineSpeedBaud());
 			break;
 	}
 
 	currentMode = mode;
 }
 
-void Config::setLineSpeed(linespeed speed) {
-	currentLineSpeed = speed;
+void Config::setLineSpeed(linespeed aLineSpeed) {
+	if (DEBUG) {
+		Serial.println("Config::setLineSpeed()");
+	}
+	currentLineSpeed = aLineSpeed;
+	Serial.end();
+	Serial.begin(getLineSpeedBaud());
+	setMode(currentMode);
 }
 
 void Config::setVoltage(ttlvoltage voltage) {
+	if (DEBUG) {
+		Serial.println("Config::setVoltage()");
+	}
 	currentVoltage = voltage;
-	int shiftNumber = shiftOff;
+
+	digitalWrite(voltagePinOnePointEight, LOW);
+	digitalWrite(voltagePinThreePointThree, LOW);
+	digitalWrite(voltagePinFivePointZero, LOW);
+
 	switch (voltage) {
-		case 1: // onePointEight
-			shiftNumber = shift18V;
+		case 0: // onePointEight
+			digitalWrite(voltagePinOnePointEight, HIGH);
 			break;
-		case 2: // threePointThree
-			shiftNumber = shift33V;
+		case 1: // threePointThree
+			digitalWrite(voltagePinThreePointThree, HIGH);
 			break;
-		case 3: // five
-			shiftNumber = shift50V;
+		case 2: // five
+			digitalWrite(voltagePinFivePointZero, HIGH);
 			break;
 	}
 
-	// Use bit shifter to activate the proper voltage regulator
-	digitalWrite(shifterLatchPin, LOW);
-    shiftOut(shifterDataPin, shifterClockPin, MSBFIRST, shiftNumber);
-    digitalWrite(shifterLatchPin, HIGH);
 }
 
-void Config::setTimeout(timeout aTimeout) {
+void Config::setLCDTimeout(timeout aTimeout) {
+	if (DEBUG) {
+		Serial.println("Config::setTimeout()");
+	}
 	currentTimeout = aTimeout;
 }
 
 void Config::setDefaults() {
+	if (DEBUG) {
+		Serial.println("Config::setDefaults()");
+	}
 	setVoltage(onePointEight);
-	setLineSpeed(oneNineteenTwoK);
+	setLineSpeed(oneFifteenTwoK);
 	setMode(ttl);
-	setTimeout(thirtyseconds);
+	setLCDTimeout(thirtyseconds);
 }
 
 void Config::processSerialData() {
+	//if (DEBUG) {
+	//	Serial.println("Config::processSerialData()");
+	//}
 	switch (currentMode) {
-		case 1: // ttl
-			if (Serial1.available()) {
-				int inByte = Serial1.read();
+		case 0: // ttl
+			if (Serial3.available()) {
+				int inByte = Serial3.read();
 				Serial.write(inByte);
 			}
 			if (Serial.available()) {
 				int inByte = Serial.read();
-				Serial1.write(inByte);
+				Serial3.write(inByte);
 			}
 			break;
-		case 2: // db9_null
+		case 1: // db9_null
 			if (Serial2.available()) {
 				int inByte = Serial2.read();
 				Serial.write(inByte);
@@ -171,14 +235,14 @@ void Config::processSerialData() {
 				Serial2.write(inByte);
 			}
 			break;
-		case 3: // cisco
-			if (Serial3.available()) {
-				int inByte = Serial3.read();
+		case 2: // cisco
+			if (Serial1.available()) {
+				int inByte = Serial1.read();
 				Serial.write(inByte);
 			}
 			if (Serial.available()) {
 				int inByte = Serial.read();
-				Serial3.write(inByte);
+				Serial1.write(inByte);
 			}
 			break;
 	}

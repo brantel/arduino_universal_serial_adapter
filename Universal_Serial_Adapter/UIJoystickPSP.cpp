@@ -13,6 +13,9 @@ Serial Adapter Project: Dynamic serial TTY passthroughs
 #include "UIJoystickPSP.h"
 
 UIJoystickPSP::UIJoystickPSP(int xAxisPin, int yAxisPin) {
+	if (DEBUG) {
+		Serial.println("UIJoystickPSP::UIJoystickPSP()");
+	}
 	this->xAxisPin = xAxisPin;
 	this->yAxisPin = yAxisPin;
 
@@ -25,6 +28,9 @@ UIJoystickPSP::UIJoystickPSP(int xAxisPin, int yAxisPin) {
 }
 
 joyDirection UIJoystickPSP::direction() {
+	// if (DEBUG) {
+	//Serial.println("UIJoystickPSP::direction()");
+	// }
 	// Read the x/y values from the joystick
 	xAxisValue = map(analogRead(xAxisPin), 0, 1023, 0, 10);
 	yAxisValue = map(analogRead(yAxisPin), 0, 1023, 0, 10);

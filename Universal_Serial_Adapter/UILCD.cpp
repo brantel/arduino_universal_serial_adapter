@@ -20,6 +20,9 @@
 #include "UIJoystickPSP.h"
 
 UILCD::UILCD(Config* config) {
+  if (DEBUG) {
+    Serial.println("UILCD::UILCD()");
+  }
   pinMode(LCD_LITE, OUTPUT);
 
   this->config = config;
@@ -28,26 +31,36 @@ UILCD::UILCD(Config* config) {
 	tft->initR(INITR_BLACKTAB);
 	tft->setRotation(3);
 
-	if (!SD.begin(SD_CS)) {
+	if (!SD.begin(SD_CS) && DEBUG) {
 		Serial.println("SD.begin(SD_CS) -- failed!");
 	}
 }
 
 void UILCD::start() {
+  if (DEBUG) {
+    Serial.println("UILCD::start()");
+  }
   drawSplashScreen();
   drawMainScreen();
 }
 
 void UILCD::turnOn() {
+  if (DEBUG) {
+    Serial.println("UILCD::turnOn()");
+  }
   digitalWrite(LCD_LITE, HIGH);
 }
 
 void UILCD::turnOff() {
+  if (DEBUG) {
+    Serial.println("UILCD::turnOff()");
+  }
   digitalWrite(LCD_LITE, LOW);
 }
 
 void UILCD::handleJoystickEvent(joyDirection direction) {
   if (DEBUG) {
+    Serial.println("UILCD::handleJoystickEvent()");
     Serial.println("begin UILCD::handleJoystickEvent");
     Serial.print("Current Screen: ");
     Serial.println(currentScreen);
@@ -64,7 +77,8 @@ void UILCD::handleJoystickEvent(joyDirection direction) {
 }
 
 void UILCD::handleOkButtonEvent() {
-    if (DEBUG) {
+  if (DEBUG) {
+    Serial.println("UILCD::handleOkButtonEvent()");
     Serial.println("begin UILCD::handleOkButtonEvent");
     Serial.print("Current Screen: ");
     Serial.println(currentScreen);
@@ -87,14 +101,15 @@ void UILCD::handleOkButtonEvent() {
       drawVoltageScreen(true);
       break;
     case 5: // timeoutScreen
-      config->setTimeout((timeout)(currentLine - 3));
+      config->setLCDTimeout((timeout)(currentLine - 3));
       drawTimeoutScreen(true);
       break;
   }
 }
 
 void UILCD::handleCancelButtonEvent() {
-    if (DEBUG) {
+  if (DEBUG) {
+    Serial.println("UILCD::handleCancelButtonEvent");
     Serial.println("begin UILCD::handleCancelButtonEvent");
     Serial.print("Current Screen: ");
     Serial.println(currentScreen);
@@ -111,6 +126,9 @@ void UILCD::handleCancelButtonEvent() {
 }
 
 void UILCD::mainScreenOkButton() {
+  if (DEBUG) {
+    Serial.println("UILCD::mainScreenOkButton");
+  }
   switch(currentLine) {
     case 0: // Connection Type
       drawConnectionScreen(false);
@@ -134,21 +152,33 @@ void UILCD::mainScreenOkButton() {
 }
 
 void UILCD::mainScreenCancelButton() {
+  if (DEBUG) {
+    Serial.println("UILCD::mainScreenCancelButton()");
+  }
   // Do nothing for now
 }
 
 void UILCD::unHilightLine(int line) {
+  if (DEBUG) {
+    Serial.println("UILCD::unHilightLine()");
+  }
   tft->setCursor(0, line * FONT_HEIGHT);
   tft->fillRect(0, line * FONT_HEIGHT, FONT_WIDTH, FONT_HEIGHT, BACKGROUND);
 }
 
 void UILCD::hilightLine(int line) {
+  if (DEBUG) {
+    Serial.println("UILCD::hilightLine()");
+  }
   tft->setCursor(0, line * FONT_HEIGHT);
   tft->setTextColor(HILIGHT);
   tft->print("*");
 }
 
 void UILCD::mainScreenHilight(joyDirection direction) {
+  if (DEBUG) {
+    Serial.println("UILCD::mainScreenHilight()");
+  }
   if (direction == joyUp) {
     // Don't go up past the 1st line
     if (currentLine == 0) {
@@ -160,13 +190,17 @@ void UILCD::mainScreenHilight(joyDirection direction) {
 
     // Skip blank lines
     if (config->getSerialMode() == ttl) {
-      Serial.println("Serial ttl blank line skip");
+      if (DEBUG) {
+        Serial.println("Serial ttl blank line skip");
+      }
       if (currentLine == 3 || currentLine == 6) {
         currentLine -= 1;
       }
     }
     else {
-      Serial.println("Non-serial ttl blank line skip");
+      if (DEBUG) {
+        Serial.println("Non-serial ttl blank line skip");
+      }
       if (currentLine == 2 || currentLine == 5) {
         currentLine -= 1;
       }
@@ -193,13 +227,17 @@ void UILCD::mainScreenHilight(joyDirection direction) {
 
     // Skip blank lines
     if (config->getSerialMode() == ttl) {
-      Serial.println("Serial ttl blank line skip");
+      if (DEBUG) {
+        Serial.println("Serial ttl blank line skip");
+      }
       if (currentLine == 3 || currentLine == 6) {
         currentLine += 1;
       }
     }
     else {
-      Serial.println("Non-serial ttl blank line skip");
+      if (DEBUG) {
+        Serial.println("Non-serial ttl blank line skip");
+      }
       if (currentLine == 2 || currentLine == 5) {
         currentLine += 1;
       }
@@ -210,6 +248,9 @@ void UILCD::mainScreenHilight(joyDirection direction) {
 }
 
 void UILCD::configScreenHighlight(joyDirection direction) {
+  if (DEBUG) {
+    Serial.println("UILCD::configScreenhilight()");
+  }
   if (direction == joyUp) {
     // Don't go up past the 1st line
     if (currentLine == 3) {
@@ -256,6 +297,9 @@ void UILCD::configScreenHighlight(joyDirection direction) {
 }
 
 void UILCD::drawTimeoutScreen(bool keepCurrentLine) {
+  if (DEBUG) {
+    Serial.println("UILCD::drawTimeoutScreen()");
+  }
   currentScreen = timeoutscreen;
   if (!keepCurrentLine) {
     currentLine = 3;
@@ -288,6 +332,9 @@ void UILCD::drawTimeoutScreen(bool keepCurrentLine) {
 }
 
 void UILCD::drawConnectionScreen(bool keepCurrentLine) {
+  if (DEBUG) {
+    Serial.println("UILCD::drawConnectionScreen()");
+  }
   currentScreen = connectionScreen;
   if (!keepCurrentLine) {
     currentLine = 3;
@@ -320,6 +367,9 @@ void UILCD::drawConnectionScreen(bool keepCurrentLine) {
 }
 
 void UILCD::drawLineSpeedScreen(bool keepCurrentLine) {
+  if (DEBUG) {
+    Serial.println("UILCD::drawLineSpeedScreen()");
+  }
   currentScreen = lineSpeedScreen;
   if (!keepCurrentLine) {
     currentLine = 3;
@@ -352,6 +402,9 @@ void UILCD::drawLineSpeedScreen(bool keepCurrentLine) {
 }
 
 void UILCD::drawVoltageScreen(bool keepCurrentLine) {
+  if (DEBUG) {
+    Serial.println("UILCD::drawVoltageScreen()");
+  }
   currentScreen = voltageScreen;
   if (!keepCurrentLine) {
     currentLine = 3;
@@ -384,6 +437,9 @@ void UILCD::drawVoltageScreen(bool keepCurrentLine) {
 }
 
 void UILCD::drawMainScreen() {
+  if (DEBUG) {
+    Serial.println("UILCD::drawMainScreen()");
+  }
   currentScreen = mainScreen;
   currentLine = 0;
 
@@ -413,6 +469,9 @@ void UILCD::drawMainScreen() {
 }
 
 void UILCD::drawSplashScreen() {
+  if (DEBUG) {
+    Serial.println("UILCD::drawSplashScreen()");
+  }
   tft->setCursor(0,0);
 	tft->fillScreen(SPLASH_BACKGROUND);
 	bmpDraw("splash.bmp", 13, 0);
@@ -424,6 +483,9 @@ void UILCD::drawSplashScreen() {
 }
 
 void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
+  if (DEBUG) {
+    Serial.println("UILCD::bmpDraw()");
+  }
   File     bmpFile;
   int      bmpWidth, bmpHeight;   // W+H in pixels
   uint8_t  bmpDepth;              // Bit depth (currently must be 24)
@@ -439,41 +501,55 @@ void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
 
   if((x >= tft->width()) || (y >= tft->height())) return;
 
-  Serial.println();
-  Serial.print("Loading image '");
-  Serial.print(filename);
-  Serial.println('\'');
+  if (DEBUG) {
+    Serial.println();
+    Serial.print("Loading image '");
+    Serial.print(filename);
+    Serial.println('\'');
+  }
 
   // Open requested file on SD card
   if ((bmpFile = SD.open(filename)) == NULL) {
-    Serial.print("File not found");
+    if (DEBUG) {
+      Serial.print("File not found");
+    }
     return;
   }
 
   // Parse BMP header
   if(read16(bmpFile) == 0x4D42) { // BMP signature
-    Serial.print("File size: "); 
-    Serial.println(read32(bmpFile));
+    if (DEBUG) {
+      Serial.print("File size: "); 
+      Serial.println(read32(bmpFile));
+    }
     (void)read32(bmpFile); // Read & ignore creator bytes
     bmpImageoffset = read32(bmpFile); // Start of image data
-    Serial.print("Image Offset: "); 
-    Serial.println(bmpImageoffset, DEC);
+    if (DEBUG) {
+      Serial.print("Image Offset: "); 
+      Serial.println(bmpImageoffset, DEC);
+    }
     // Read DIB header
-    Serial.print("Header size: "); 
-    Serial.println(read32(bmpFile));
+    if (DEBUG) {
+      Serial.print("Header size: "); 
+      Serial.println(read32(bmpFile));
+    }
     bmpWidth  = read32(bmpFile);
     bmpHeight = read32(bmpFile);
     if(read16(bmpFile) == 1) { // # planes -- must be '1'
       bmpDepth = read16(bmpFile); // bits per pixel
-      Serial.print("Bit Depth: "); 
-      Serial.println(bmpDepth);
+      if (DEBUG) {
+        Serial.print("Bit Depth: "); 
+        Serial.println(bmpDepth);
+      }
       if((bmpDepth == 24) && (read32(bmpFile) == 0)) { // 0 = uncompressed
 
         goodBmp = true; // Supported BMP format -- proceed!
-        Serial.print("Image size: ");
-        Serial.print(bmpWidth);
-        Serial.print('x');
-        Serial.println(bmpHeight);
+        if (DEBUG) {
+          Serial.print("Image size: ");
+          Serial.print(bmpWidth);
+          Serial.print('x');
+          Serial.println(bmpHeight);
+        }
 
         // BMP rows are padded (if needed) to 4-byte boundary
         rowSize = (bmpWidth * 3 + 3) & ~3;
@@ -526,15 +602,17 @@ void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
           } // end pixel
           delay(5);
         } // end scanline
-        Serial.print("Loaded in ");
-        Serial.print(millis() - startTime);
-        Serial.println(" ms");
+        if (DEBUG) {
+          Serial.print("Loaded in ");
+          Serial.print(millis() - startTime);
+          Serial.println(" ms");
+        }
       } // end goodBmp
     }
   }
 
   bmpFile.close();
-  if(!goodBmp) Serial.println("BMP format not recognized.");
+  if(!goodBmp && DEBUG) Serial.println("BMP format not recognized.");
 }
 
 // These read 16- and 32-bit types from the SD card file.
@@ -542,6 +620,9 @@ void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
 // May need to reverse subscript order if porting elsewhere.
 
 uint16_t UILCD::read16(File f) {
+  if (DEBUG) {
+    Serial.println("UILCD::read16()");
+  }
   uint16_t result;
   ((uint8_t *)&result)[0] = f.read(); // LSB
   ((uint8_t *)&result)[1] = f.read(); // MSB
@@ -549,6 +630,9 @@ uint16_t UILCD::read16(File f) {
 }
 
 uint32_t UILCD::read32(File f) {
+  if (DEBUG) {
+    Serial.println("UILCD::read32()");
+  }
   uint32_t result;
   ((uint8_t *)&result)[0] = f.read(); // LSB
   ((uint8_t *)&result)[1] = f.read();

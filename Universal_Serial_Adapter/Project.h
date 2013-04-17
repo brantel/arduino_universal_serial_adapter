@@ -28,10 +28,10 @@
 #define LCD_DC   9  // Data/command line for TFT
 #define LCD_RST  8  // Reset line for TFT (or connect to +5V)
 
-// 74HC595 Bit Shifter Pinout
-#define shifterLatchPin 2 //Pin connected to ST_CP of 74HC595
-#define shifterClockPin 5 //Pin connected to SH_CP of 74HC595
-#define shifterDataPin  4 //Pin connected to DS of 74HC595
+// Voltage Pinouts
+#define voltagePinOnePointEight   40 // Pin controlling 1.8V TTL logic
+#define voltagePinThreePointThree 41 // Pin controlling 3.3V TTL logic
+#define voltagePinFivePointZero   42 // Pin controlling 5V TTL logic
 
 // Colors / theme of UI
 #define SPLASH_BACKGROUND ST7735_WHITE
@@ -66,7 +66,7 @@ enum linespeed {
   nineteenTwoK,
   thirtyeightFourK,
   fiftysevenFiveK,
-  oneNineteenTwoK,
+  oneFifteenTwoK,
   maxlinespeed,
   zero=-1
 };

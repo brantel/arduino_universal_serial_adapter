@@ -13,18 +13,25 @@
 #include "Project.h"
 
 UIButton::UIButton(int buttonPin, int ledPin) {
+	if (DEBUG) {
+		Serial.println("UIButton::UIButton()");
+	}
 	this->buttonPin = buttonPin;
 	this->ledPin = ledPin;
 	setup();
 }
 
 void UIButton::setup() {
+	if (DEBUG) {
+		Serial.println("UIButton::setup()");
+	}
 	pinMode(buttonPin, INPUT);
 	pinMode(ledPin, OUTPUT);
 }
 
 void UIButton::turnOnLed() {
 	if (DEBUG) {
+		Serial.println("UIButton::turnOnLed()");
 		Serial.print("Turning on pin: ");
 		Serial.println(ledPin);
 	}
@@ -33,6 +40,7 @@ void UIButton::turnOnLed() {
 
 void UIButton::turnOffLed() {
 	if (DEBUG) {
+		Serial.println("UIButton::turnOffLed()");
 		Serial.print("Turning off pin: ");
 		Serial.println(ledPin);
 	}
@@ -40,6 +48,9 @@ void UIButton::turnOffLed() {
 }
 
 bool UIButton::isPressed() {
+	// if (DEBUG) {
+	//Serial.println("UIButton::isPressed()");
+	// }
 	bool pressed = digitalRead(buttonPin);
 	while (digitalRead(buttonPin)); // Wait for release
 	return pressed;
