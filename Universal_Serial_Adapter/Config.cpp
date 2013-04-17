@@ -12,11 +12,13 @@
 
 #include "Project.h"
 #include "Config.h"
+#include "UI.h"
 
 Config::Config() {
 	if (DEBUG) {
 		Serial.println("Config::Config()");
 	}
+
 	currentMode = none;
 	currentLineSpeed = zero;
 	currentVoltage = negOne;
@@ -198,6 +200,7 @@ void Config::setLCDTimeout(timeout aTimeout) {
 		Serial.println("Config::setTimeout()");
 	}
 	currentTimeout = aTimeout;
+	ui->setLCDTimeout();
 }
 
 void Config::setDefaults() {

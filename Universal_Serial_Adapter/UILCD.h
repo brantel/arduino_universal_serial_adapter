@@ -8,6 +8,9 @@
  attribute.
  */
 
+#ifndef UILCD_h
+#define UILCD_h
+
 #include "Arduino.h"
 
 #include <Adafruit_GFX.h>
@@ -19,8 +22,8 @@
 #include "UIJoystickPSP.h"
 #include "Config.h"
 
-#ifndef UILCD_h
-#define UILCD_h
+// Forward declaration of Config
+class Config;
 
 #define BUFFPIXEL 20
 

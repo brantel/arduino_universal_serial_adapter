@@ -31,7 +31,7 @@ void setup() {
   config = new Config();
   config->setDefaults();
 
-  ui = new UI(config);
+  ui = new UI();
 }
 
 void loop() {

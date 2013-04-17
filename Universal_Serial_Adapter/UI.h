@@ -8,6 +8,9 @@
  attribute.
  */
 
+#ifndef UI_h
+#define UI_h
+
 #include <Metro.h>
 
 #include "Project.h"
@@ -15,6 +18,13 @@
 #include "UIJoystickPSP.h"
 #include "UILCD.h"
 #include "Config.h"
+
+// Forward declaration of Config
+class Config;
+class UILCD;
+
+// Use global config and ui objects defined / initialized in main ino file
+extern Config* config;
 
 class UI {
 private:
@@ -26,12 +36,10 @@ private:
 
 	UILCD* lcd;
 
-	Config* config;
-
 	Metro* uiTimeout;
 
 public:
-	UI(Config* aConfig);
+	UI();
 	void startUI();
 
 	void processInputEvents();
@@ -39,4 +47,8 @@ public:
 
 	void disableUI();
 	void enableUI();
+
+	void setLCDTimeout();
 };
+
+#endif

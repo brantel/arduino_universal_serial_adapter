@@ -8,10 +8,17 @@
  attribute.
  */
 
-#include "Project.h"
-
 #ifndef Config_h
 #define Config_h
+
+#include "Project.h"
+#include "UI.h"
+
+// Forward declaration of UI
+class UI;
+
+// Use global config and ui objects defined / initialized in main ino file
+extern UI* ui;
 
 class Config {
 private:

@@ -13,11 +13,10 @@
 #include "Project.h"
 #include "UI.h"
 
-UI::UI(Config* aConfig) {
+UI::UI() {
 	if (DEBUG) {
 		Serial.println("Config::UI()");
 	}
-	config = aConfig;
 
 	okButton = new UIButton(okButtonPin, okButtonLed);
 	cancelButton = new UIButton(cancelButtonPin, cancelButtonLed);
@@ -28,6 +27,10 @@ UI::UI(Config* aConfig) {
 	uiTimeout = new Metro(config->getTimeoutMilis());
 
 	startUI();
+}
+
+void UI::setLCDTimeout() {
+	uiTimeout->interval(config->getTimeoutMilis());
 }
 
 void UI::startUI() {
@@ -60,7 +63,7 @@ void UI::enableUI() {
 }
 
 void UI::processTimeoutEvents() {
-	if (uiTimeout->check() == 1) {
+	if (uiTimeout->check()) {
 		disableUI();
 	}
 }
