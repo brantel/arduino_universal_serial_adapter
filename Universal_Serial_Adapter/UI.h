@@ -49,6 +49,7 @@ public:
 	void enableUI();
 
 	void setLCDTimeout();
+	void resetTimeout();
 };
 
 #endif

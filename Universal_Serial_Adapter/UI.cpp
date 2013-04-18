@@ -33,6 +33,10 @@ void UI::setLCDTimeout() {
 	uiTimeout->interval(config->getTimeoutMilis());
 }
 
+void UI::resetTimeout() {
+	uiTimeout->reset();
+}
+
 void UI::startUI() {
 	if (DEBUG) {
 		Serial.println("Config::startUI()");
@@ -75,10 +79,12 @@ void UI::processInputEvents() {
 			enableUI();
 			return;
 		}
+
 		if (DEBUG) {
 			Serial.print("Joystick Event: ");
 			Serial.println(joyStickEvent);
 		}
+		resetTimeout();
 		lcd->handleJoystickEvent(joyStickEvent);
 	}
 
@@ -87,6 +93,7 @@ void UI::processInputEvents() {
 			enableUI();
 			return;
 		}
+		resetTimeout();
 		lcd->handleOkButtonEvent();
 	}
 
@@ -95,6 +102,7 @@ void UI::processInputEvents() {
 			enableUI();
 			return;
 		}
+		resetTimeout();
 		lcd->handleCancelButtonEvent();
 	}
 }
