@@ -25,6 +25,9 @@
 // Forward declaration of Config
 class Config;
 
+// Use global config and ui objects defined / initialized in main ino file
+extern Config* config;
+
 #define BUFFPIXEL 20
 
 enum screen {
@@ -39,7 +42,6 @@ enum screen {
 class UILCD {
 private:
 	Adafruit_ST7735* tft;
-	Config* config;
 
 	int currentLine;
 	screen currentScreen;
@@ -61,7 +63,7 @@ private:
 	void mainScreenCancelButton();
 
 public:
-	UILCD(Config* config);
+	UILCD();
 	void bmpDraw(char *filename, uint8_t x, uint8_t y);
 	void handleJoystickEvent(joyDirection aDirection);
 	void handleOkButtonEvent();

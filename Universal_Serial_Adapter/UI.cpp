@@ -22,7 +22,7 @@ UI::UI() {
 	cancelButton = new UIButton(cancelButtonPin, cancelButtonLed);
 	pspJoystick = new UIJoystickPSP(pspXPin, pspYPin);
 
-	lcd = new UILCD(config);
+	lcd = new UILCD();
 
 	uiTimeout = new Metro(config->getTimeoutMilis());
 

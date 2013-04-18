@@ -19,13 +19,11 @@
 #include "UILCD.h"
 #include "UIJoystickPSP.h"
 
-UILCD::UILCD(Config* config) {
+UILCD::UILCD() {
   if (DEBUG) {
     Serial.println("UILCD::UILCD()");
   }
   pinMode(LCD_LITE, OUTPUT);
-
-  this->config = config;
 
 	tft = new Adafruit_ST7735(LCD_CS, LCD_DC, LCD_RST);
 	tft->initR(INITR_BLACKTAB);
