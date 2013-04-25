@@ -13,37 +13,37 @@
 #include "Project.h"
 
 UIButton::UIButton(int buttonPin, int ledPin) {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("UIButton::UIButton()");
-	}
+#endif
 	this->buttonPin = buttonPin;
 	this->ledPin = ledPin;
 	setup();
 }
 
 void UIButton::setup() {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("UIButton::setup()");
-	}
+#endif
 	pinMode(buttonPin, INPUT);
 	pinMode(ledPin, OUTPUT);
 }
 
 void UIButton::turnOnLed() {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("UIButton::turnOnLed()");
 		Serial.print("Turning on pin: ");
 		Serial.println(ledPin);
-	}
+#endif
 	digitalWrite(ledPin, HIGH);
 }
 
 void UIButton::turnOffLed() {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("UIButton::turnOffLed()");
 		Serial.print("Turning off pin: ");
 		Serial.println(ledPin);
-	}
+#endif
 	digitalWrite(ledPin, LOW);
 }
 

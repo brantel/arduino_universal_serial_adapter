@@ -14,9 +14,9 @@
 #include "UI.h"
 
 UI::UI() {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("Config::UI()");
-	}
+#endif
 
 	okButton = new UIButton(okButtonPin, okButtonLed);
 	cancelButton = new UIButton(cancelButtonPin, cancelButtonLed);
@@ -38,17 +38,17 @@ void UI::resetTimeout() {
 }
 
 void UI::startUI() {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("Config::startUI()");
-	}
+#endif
 	enableUI();
 	lcd->start();
 }
 
 void UI::disableUI() {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("Config::disableUI()");
-	}
+#endif
 	config->disableUI();
 	lcd->turnOff();
 	okButton->turnOffLed();
@@ -56,9 +56,9 @@ void UI::disableUI() {
 }
 
 void UI::enableUI() {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("Config::enableUI()");
-	}
+#endif
 	config->enableUI();
 	lcd->turnOn();
 	okButton->turnOnLed();
@@ -80,10 +80,10 @@ void UI::processInputEvents() {
 			return;
 		}
 
-		if (DEBUG) {
+#if DEBUG == 2
 			Serial.print("Joystick Event: ");
 			Serial.println(joyStickEvent);
-		}
+#endif
 		resetTimeout();
 		lcd->handleJoystickEvent(joyStickEvent);
 	}

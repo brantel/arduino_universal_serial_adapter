@@ -11,7 +11,7 @@
 #ifndef Project_h
 #define Project_h
 
-#define DEBUG false // For controlling debug output via serial
+#define DEBUG 1 // NONE = 0; MINIMAL = 1; FULL = 2;
 
 // Buttons / Joystick / Input Hardware Pinouts
 #define okButtonPin     22

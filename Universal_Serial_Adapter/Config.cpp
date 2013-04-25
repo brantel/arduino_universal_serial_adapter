@@ -15,9 +15,9 @@
 #include "UI.h"
 
 Config::Config() {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("Config::Config()");
-	}
+#endif
 
 	currentMode = none;
 	currentLineSpeed = zero;
@@ -28,50 +28,50 @@ Config::Config() {
 	pinMode(voltagePinThreePointThree, OUTPUT);
 	pinMode(voltagePinFivePointZero, OUTPUT);
 
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.begin(115200);
-	}
+#endif
 }
 
 bool Config::isUIEnabled() {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("Config::isUIEnabled()");
-	}
+#endif
 	return uiEnabled;
 }
 
 void Config::enableUI() {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("Config::enableUI()");
-	}
+#endif
 	uiEnabled = true;
 }
 
 void Config::disableUI() {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("Config::disableUI()");
-	}
+#endif
 	uiEnabled = false;
 }
 
 serialmode Config::getSerialMode() {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("Config::getSerialMode()");
-	}
+#endif
 	return currentMode;
 }
 
 linespeed Config::getLineSpeed() {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("Config::getLineSpeed()");
-	}
+#endif
 	return currentLineSpeed;
 }
 
 float Config::getLineSpeedBaud() {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("Config::getLineSpeedBaud()");
-	}
+#endif
 
 	switch (currentLineSpeed) {
 		case 0: // twentyFourHundredBaud
@@ -96,23 +96,23 @@ float Config::getLineSpeedBaud() {
 }
 
 ttlvoltage Config::getVoltage() {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("Config::getVoltage()");
-	}
+#endif
 	return currentVoltage;
 }
 
 timeout Config::getTimeout() {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("Config::getTimeout()");
-	}
+#endif
 	return currentTimeout;
 }
 
 int Config::getTimeoutMilis() {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("Config::getTimeoutMilis()");
-	}
+#endif
 	switch (currentTimeout) {
 		case 0: // tenseconds
 			return 10000;
@@ -127,12 +127,12 @@ int Config::getTimeoutMilis() {
 }
 
 void Config::setMode(serialmode mode) {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("Config::setMode()");
 		Serial.print("    Setting ttl line speed to:");
 		float baudrate = this->getLineSpeedBaud();
 		Serial.println(baudrate);
-	}
+#endif
 
 	switch (currentMode) {
 		case 1: // ttl
@@ -162,9 +162,9 @@ void Config::setMode(serialmode mode) {
 }
 
 void Config::setLineSpeed(linespeed aLineSpeed) {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("Config::setLineSpeed()");
-	}
+#endif
 	currentLineSpeed = aLineSpeed;
 	Serial.end();
 	Serial.begin(getLineSpeedBaud());
@@ -172,9 +172,9 @@ void Config::setLineSpeed(linespeed aLineSpeed) {
 }
 
 void Config::setVoltage(ttlvoltage voltage) {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("Config::setVoltage()");
-	}
+#endif
 	currentVoltage = voltage;
 
 	digitalWrite(voltagePinOnePointEight, LOW);
@@ -196,17 +196,17 @@ void Config::setVoltage(ttlvoltage voltage) {
 }
 
 void Config::setLCDTimeout(timeout aTimeout) {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("Config::setTimeout()");
-	}
+#endif
 	currentTimeout = aTimeout;
 	ui->setLCDTimeout();
 }
 
 void Config::setDefaults() {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("Config::setDefaults()");
-	}
+#endif
 	setVoltage(onePointEight);
 	setLineSpeed(oneFifteenTwoK);
 	setMode(ttl);

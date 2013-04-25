@@ -13,9 +13,9 @@ Serial Adapter Project: Dynamic serial TTY passthroughs
 #include "UIJoystickPSP.h"
 
 UIJoystickPSP::UIJoystickPSP(int xAxisPin, int yAxisPin) {
-	if (DEBUG) {
+#if DEBUG == 2
 		Serial.println("UIJoystickPSP::UIJoystickPSP()");
-	}
+#endif
 	this->xAxisPin = xAxisPin;
 	this->yAxisPin = yAxisPin;
 
