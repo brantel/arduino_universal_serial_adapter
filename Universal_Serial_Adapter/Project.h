@@ -33,6 +33,9 @@
 #define voltagePinThreePointThree 41 // Pin controlling 3.3V TTL logic
 #define voltagePinFivePointZero   42 // Pin controlling 5V TTL logic
 
+// Timer pins
+#define timerThreePin 2 // Maps to Mega pin 12
+
 // Colors / theme of UI
 #define SPLASH_BACKGROUND ST7735_WHITE
 #define BACKGROUND        ST7735_BLACK
