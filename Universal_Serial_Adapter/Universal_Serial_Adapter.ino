@@ -23,6 +23,8 @@
 #include <SPI.h>
 
 #include <TimerThree.h>
+#include <Metro.h>
+#include "RTClib.h"
 
 UI* ui;
 Config* config;
@@ -65,7 +67,7 @@ void setup() {
 
 void loop() {
   if (DEBUG) {
-    DateTime now = RTC.now();
+    DateTime now = rtc.now();
     Serial.print(now.year(), DEC);
     Serial.print('/');
     Serial.print(now.month(), DEC);
