@@ -50,6 +50,9 @@ public:
 
 	void setLCDTimeout();
 	void resetTimeout();
+
+	void blinkOKButton();
+	void blinkCancelButton();
 };
 
 #endif

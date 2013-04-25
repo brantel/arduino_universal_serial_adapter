@@ -610,7 +610,7 @@ void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
   }
 
   bmpFile.close();
-  if(!goodBmp && DEBUG) Serial.println("BMP format not recognized.");
+  if(!goodBmp && DEBUG == 2) Serial.println("BMP format not recognized.");
 }
 
 // These read 16- and 32-bit types from the SD card file.

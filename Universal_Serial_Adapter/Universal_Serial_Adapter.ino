@@ -66,22 +66,6 @@ void setup() {
 }
 
 void loop() {
-  if (DEBUG) {
-    DateTime now = rtc.now();
-    Serial.print(now.year(), DEC);
-    Serial.print('/');
-    Serial.print(now.month(), DEC);
-    Serial.print('/');
-    Serial.print(now.day(), DEC);
-    Serial.print(' ');
-    Serial.print(now.hour(), DEC);
-    Serial.print(':');
-    Serial.print(now.minute(), DEC);
-    Serial.print(':');
-    Serial.print(now.second(), DEC);
-    Serial.println();
-  }
-
   // Serial data is processed via an interrupt so isn't needed in the main loop
   ui->processInputEvents();
   ui->processTimeoutEvents();

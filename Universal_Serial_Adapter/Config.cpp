@@ -217,35 +217,56 @@ void Config::processSerialData() {
 	//if (DEBUG) {
 	//	Serial.println("Config::processSerialData()");
 	//}
+	//#if DEBUG == 2
+    //DateTime now = rtc.now();
+    //Serial.print(now.year(), DEC);
+    //Serial.print('/');
+    //Serial.print(now.month(), DEC);
+    //Serial.print('/');
+    //Serial.print(now.day(), DEC);
+    //Serial.print(' ');
+    //Serial.print(now.hour(), DEC);
+    //Serial.print(':');
+    //Serial.print(now.minute(), DEC);
+    //Serial.print(':');
+    //Serial.print(now.second(), DEC);
+    //Serial.println();
+	//#endif
 	switch (currentMode) {
 		case 0: // ttl
 			if (Serial3.available()) {
 				int inByte = Serial3.read();
 				Serial.write(inByte);
+				ui->blinkCancelButton();
 			}
 			if (Serial.available()) {
 				int inByte = Serial.read();
 				Serial3.write(inByte);
+				ui->blinkOKButton();
 			}
 			break;
 		case 1: // db9_null
 			if (Serial2.available()) {
 				int inByte = Serial2.read();
 				Serial.write(inByte);
+				ui->blinkCancelButton();
 			}
 			if (Serial.available()) {
 				int inByte = Serial.read();
 				Serial2.write(inByte);
+				ui->blinkOKButton();
 			}
 			break;
 		case 2: // cisco
 			if (Serial1.available()) {
 				int inByte = Serial1.read();
 				Serial.write(inByte);
+				ui->blinkCancelButton();
 			}
 			if (Serial.available()) {
 				int inByte = Serial.read();
 				Serial1.write(inByte);
+				ui->blinkOKButton();
 			}
 			break;
 	}

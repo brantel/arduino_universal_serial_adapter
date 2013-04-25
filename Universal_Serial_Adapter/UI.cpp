@@ -29,6 +29,20 @@ UI::UI() {
 	startUI();
 }
 
+void UI::blinkOKButton() {
+	if (!config->isUIEnabled()) {
+		okButton->turnOnLed();
+		okButton->turnOffLed();
+	}
+}
+
+void UI::blinkCancelButton() {
+	if (!config->isUIEnabled()) {
+		cancelButton->turnOnLed();
+		cancelButton->turnOffLed();
+	}
+}
+
 void UI::setLCDTimeout() {
 	uiTimeout->interval(config->getTimeoutMilis());
 }
