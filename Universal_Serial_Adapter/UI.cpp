@@ -15,7 +15,7 @@
 
 UI::UI() {
 #if DEBUG == 2
-		Serial.println("Config::UI()");
+		serialPort0.println("Config::UI()");
 #endif
 
 	okButton = new UIButton(okButtonPin, okButtonLed);
@@ -61,7 +61,7 @@ void UI::resetTimeout() {
 
 void UI::startUI() {
 #if DEBUG == 2
-		Serial.println("Config::startUI()");
+		serialPort0.println("Config::startUI()");
 #endif
 	enableUI();
 	lcd->start();
@@ -69,7 +69,7 @@ void UI::startUI() {
 
 void UI::disableUI() {
 #if DEBUG == 2
-		Serial.println("Config::disableUI()");
+		serialPort0.println("Config::disableUI()");
 #endif
 	config->disableUI();
 	lcd->turnOff();
@@ -79,7 +79,7 @@ void UI::disableUI() {
 
 void UI::enableUI() {
 #if DEBUG == 2
-		Serial.println("Config::enableUI()");
+		serialPort0.println("Config::enableUI()");
 #endif
 	config->enableUI();
 	lcd->turnOn();
@@ -103,8 +103,8 @@ void UI::processInputEvents() {
 		}
 
 #if DEBUG == 2
-			Serial.print("Joystick Event: ");
-			Serial.println(joyStickEvent);
+			serialPort0.print("Joystick Event: ");
+			serialPort0.println(joyStickEvent);
 #endif
 		resetTimeout();
 		lcd->handleJoystickEvent(joyStickEvent);

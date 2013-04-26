@@ -16,7 +16,7 @@
 
 Config::Config() {
 #if DEBUG == 2
-		Serial.println("Config::Config()");
+		serialPort0.println("Config::Config()");
 #endif
 
 	currentMode = none;
@@ -29,48 +29,48 @@ Config::Config() {
 	pinMode(voltagePinFivePointZero, OUTPUT);
 
 #if DEBUG == 2
-		Serial.begin(115200);
+		serialPort0.begin(115200);
 #endif
 }
 
 bool Config::isUIEnabled() {
 #if DEBUG == 2
-		Serial.println("Config::isUIEnabled()");
+		serialPort0.println("Config::isUIEnabled()");
 #endif
 	return uiEnabled;
 }
 
 void Config::enableUI() {
 #if DEBUG == 2
-		Serial.println("Config::enableUI()");
+		serialPort0.println("Config::enableUI()");
 #endif
 	uiEnabled = true;
 }
 
 void Config::disableUI() {
 #if DEBUG == 2
-		Serial.println("Config::disableUI()");
+		serialPort0.println("Config::disableUI()");
 #endif
 	uiEnabled = false;
 }
 
 serialmode Config::getSerialMode() {
 #if DEBUG == 2
-		Serial.println("Config::getSerialMode()");
+		serialPort0.println("Config::getSerialMode()");
 #endif
 	return currentMode;
 }
 
 linespeed Config::getLineSpeed() {
 #if DEBUG == 2
-		Serial.println("Config::getLineSpeed()");
+		serialPort0.println("Config::getLineSpeed()");
 #endif
 	return currentLineSpeed;
 }
 
 float Config::getLineSpeedBaud() {
 #if DEBUG == 2
-		Serial.println("Config::getLineSpeedBaud()");
+		serialPort0.println("Config::getLineSpeedBaud()");
 #endif
 
 	switch (currentLineSpeed) {
@@ -97,21 +97,21 @@ float Config::getLineSpeedBaud() {
 
 ttlvoltage Config::getVoltage() {
 #if DEBUG == 2
-		Serial.println("Config::getVoltage()");
+		serialPort0.println("Config::getVoltage()");
 #endif
 	return currentVoltage;
 }
 
 timeout Config::getTimeout() {
 #if DEBUG == 2
-		Serial.println("Config::getTimeout()");
+		serialPort0.println("Config::getTimeout()");
 #endif
 	return currentTimeout;
 }
 
 int Config::getTimeoutMilis() {
 #if DEBUG == 2
-		Serial.println("Config::getTimeoutMilis()");
+		serialPort0.println("Config::getTimeoutMilis()");
 #endif
 	switch (currentTimeout) {
 		case 0: // tenseconds
@@ -128,33 +128,33 @@ int Config::getTimeoutMilis() {
 
 void Config::setMode(serialmode mode) {
 #if DEBUG == 2
-		Serial.println("Config::setMode()");
-		Serial.print("    Setting ttl line speed to:");
+		serialPort0.println("Config::setMode()");
+		serialPort0.print("    Setting ttl line speed to:");
 		float baudrate = this->getLineSpeedBaud();
-		Serial.println(baudrate);
+		serialPort0.println(baudrate);
 #endif
 
 	switch (currentMode) {
 		case 1: // ttl
-			Serial3.end();
+			serialPort3.end();
 			break;
 		case 2: // db9_null
-			Serial2.end();
+			serialPort2.end();
 			break;
 		case 3: // cisco
-			Serial1.end();
+			serialPort1.end();
 			break;
 	}
 
 	switch (mode) {
 		case 0: // ttl
-			Serial3.begin(getLineSpeedBaud());
+			serialPort3.begin(getLineSpeedBaud());
 			break;
 		case 1: // db9_null
-			Serial2.begin(getLineSpeedBaud());
+			serialPort2.begin(getLineSpeedBaud());
 			break;
 		case 2: // cisco
-			Serial1.begin(getLineSpeedBaud());
+			serialPort1.begin(getLineSpeedBaud());
 			break;
 	}
 
@@ -163,17 +163,17 @@ void Config::setMode(serialmode mode) {
 
 void Config::setLineSpeed(linespeed aLineSpeed) {
 #if DEBUG == 2
-		Serial.println("Config::setLineSpeed()");
+		serialPort0.println("Config::setLineSpeed()");
 #endif
 	currentLineSpeed = aLineSpeed;
-	Serial.end();
-	Serial.begin(getLineSpeedBaud());
+	serialPort0.end();
+	serialPort0.begin(getLineSpeedBaud());
 	setMode(currentMode);
 }
 
 void Config::setVoltage(ttlvoltage voltage) {
 #if DEBUG == 2
-		Serial.println("Config::setVoltage()");
+		serialPort0.println("Config::setVoltage()");
 #endif
 	currentVoltage = voltage;
 
@@ -197,7 +197,7 @@ void Config::setVoltage(ttlvoltage voltage) {
 
 void Config::setLCDTimeout(timeout aTimeout) {
 #if DEBUG == 2
-		Serial.println("Config::setTimeout()");
+		serialPort0.println("Config::setTimeout()");
 #endif
 	currentTimeout = aTimeout;
 	ui->setLCDTimeout();
@@ -205,7 +205,7 @@ void Config::setLCDTimeout(timeout aTimeout) {
 
 void Config::setDefaults() {
 #if DEBUG == 2
-		Serial.println("Config::setDefaults()");
+		serialPort0.println("Config::setDefaults()");
 #endif
 	setVoltage(onePointEight);
 	setLineSpeed(oneFifteenTwoK);
@@ -234,43 +234,43 @@ void Config::processSerialData() {
 	//#endif
 	switch (currentMode) {
 		case 0: // ttl
-			if (Serial3.available()) {
-				int inByte = Serial3.read();
-				Serial.write(inByte);
+			if (serialPort3.available()) {
+				int inByte = serialPort3.read();
+				serialPort0.write(inByte);
 				ui->blinkCancelButton();
 				dataFile.print(inByte);
 			}
-			if (Serial.available()) {
-				int inByte = Serial.read();
-				Serial3.write(inByte);
+			if (serialPort0.available()) {
+				int inByte = serialPort0.read();
+				serialPort3.write(inByte);
 				ui->blinkOKButton();
 				dataFile.print(inByte);
 			}
 			break;
 		case 1: // db9_null
-			if (Serial2.available()) {
-				int inByte = Serial2.read();
-				Serial.write(inByte);
+			if (serialPort2.available()) {
+				int inByte = serialPort2.read();
+				serialPort0.write(inByte);
 				ui->blinkCancelButton();
 				dataFile.print(inByte);
 			}
-			if (Serial.available()) {
-				int inByte = Serial.read();
-				Serial2.write(inByte);
+			if (serialPort0.available()) {
+				int inByte = serialPort0.read();
+				serialPort2.write(inByte);
 				ui->blinkOKButton();
 				dataFile.print(inByte);
 			}
 			break;
 		case 2: // cisco
-			if (Serial1.available()) {
-				int inByte = Serial1.read();
-				Serial.write(inByte);
+			if (serialPort1.available()) {
+				int inByte = serialPort1.read();
+				serialPort0.write(inByte);
 				ui->blinkCancelButton();
 				dataFile.print(inByte);
 			}
-			if (Serial.available()) {
-				int inByte = Serial.read();
-				Serial1.write(inByte);
+			if (serialPort0.available()) {
+				int inByte = serialPort0.read();
+				serialPort1.write(inByte);
 				ui->blinkOKButton();
 				dataFile.print(inByte);
 			}
@@ -278,5 +278,5 @@ void Config::processSerialData() {
 	}
 
 	// Flush data written to log file
-	dataFile.flush();
+	dataFile.sync();
 }

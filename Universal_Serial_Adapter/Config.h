@@ -13,7 +13,7 @@
 
 #include "Project.h"
 #include "UI.h"
-#include <SD.h>
+#include <SdFile.h>
 
 // Forward declaration of UI
 class UI;
@@ -22,7 +22,7 @@ class UI;
 extern UI* ui;
 
 // File to log data to
-extern File dataFile;
+extern SdFile dataFile;
 
 class Config {
 private:

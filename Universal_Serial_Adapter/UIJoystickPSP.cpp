@@ -8,13 +8,12 @@ Serial Adapter Project: Dynamic serial TTY passthroughs
  attribute.
  */
 
-#include "Arduino.h"
 #include "Project.h"
 #include "UIJoystickPSP.h"
 
 UIJoystickPSP::UIJoystickPSP(int xAxisPin, int yAxisPin) {
 #if DEBUG == 2
-		Serial.println("UIJoystickPSP::UIJoystickPSP()");
+		serialPort0.println("UIJoystickPSP::UIJoystickPSP()");
 #endif
 	this->xAxisPin = xAxisPin;
 	this->yAxisPin = yAxisPin;
@@ -29,7 +28,7 @@ UIJoystickPSP::UIJoystickPSP(int xAxisPin, int yAxisPin) {
 
 joyDirection UIJoystickPSP::direction() {
 	// if (DEBUG) {
-	//Serial.println("UIJoystickPSP::direction()");
+	//serialPort0.println("UIJoystickPSP::direction()");
 	// }
 	// Read the x/y values from the joystick
 	xAxisValue = map(analogRead(xAxisPin), 0, 1023, 0, 10);

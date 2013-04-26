@@ -8,6 +8,8 @@
   attribute.
 */
 
+#include <SerialPort.h>
+
 #ifndef Project_h
 #define Project_h
 
@@ -50,6 +52,12 @@
 
 #define FONT_WIDTH  6
 #define FONT_HEIGHT 8
+
+// Serial ports
+extern SerialPort<0, 4096, 0> serialPort0;
+extern SerialPort<0, 4096, 0> serialPort1;
+extern SerialPort<0, 4096, 0> serialPort2;
+extern SerialPort<0, 4096, 0> serialPort3;
 
 // Serial modes supported
 //  Abused in for loops / lookup tables -- DO NOT CHANGE none or set values

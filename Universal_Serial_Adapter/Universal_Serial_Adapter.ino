@@ -19,8 +19,10 @@
 
 #include <Adafruit_GFX.h>
 #include <Adafruit_ST7735.h>
-#include <SD.h>
 #include <SPI.h>
+#include <SerialPort.h>
+#include <SdFile.h>
+#include <SdFat.h>
 
 #include <TimerThree.h>
 #include <Metro.h>
@@ -29,7 +31,12 @@
 UI* ui;
 Config* config;
 RTC_DS1307 rtc;
-File dataFile;
+SdFat sd;
+SdFile dataFile;
+SerialPort<0, 4096, 0> serialPort0;
+SerialPort<0, 4096, 0> serialPort1;
+SerialPort<0, 4096, 0> serialPort2;
+SerialPort<0, 4096, 0> serialPort3;
 
 // helper for interrupt method call
 void processSerial() {
@@ -38,7 +45,7 @@ void processSerial() {
 
 void setup() {
   // Setup various IO busses
-  Serial.begin(115200);
+  serialPort0.begin(115200);
   Wire.begin();
 
   // Ensure RTC is set to run on battery
@@ -52,6 +59,7 @@ void setup() {
   Wire.write(0b00011100); // write register bitmap, bit 7 is /EOSC
   Wire.endTransmission();
 
+  // Start real time clock
   rtc.begin();
 
   // Stuff used for serial and UI
@@ -59,13 +67,20 @@ void setup() {
   config->setDefaults();
   ui = new UI();
 
+  // Start the SD Card -- FIXME: This should likely get moved to config
+  if (!sd.begin(SD_CS)) {
+    serialPort0.println("SD.begin(SD_CS) -- failed!");
+  }
+
+  // Open data log file -- FIXME: This needs to be controlled via config some
+  dataFile.open("datalog.txt", O_WRITE | O_CREAT | O_AT_END);
+
   // Setup serial IO on an interrupt timer
   // ***THIS MUST BE DONE AFTER new Config()***
+  // ***THIS MUST BE DONE AFTER SD INIT***
   Timer3.initialize(100);                // initialize timer3, value in micro seconds
   Timer3.pwm(timerThreePin, 512);        // setup pwm on appropriate pin, 50% duty cycle
   Timer3.attachInterrupt(processSerial); // attaches method as a timer overflow interrupt
-
-  dataFile = SD.open("datalog.txt", FILE_WRITE);
 }
 
 void loop() {

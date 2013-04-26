@@ -11,11 +11,9 @@
 #ifndef UILCD_h
 #define UILCD_h
 
-#include "Arduino.h"
-
 #include <Adafruit_GFX.h>
 #include <Adafruit_ST7735.h>
-#include <SD.h>
+#include <SdFile.h>
 #include <SPI.h>
 
 #include "Project.h"
@@ -46,8 +44,8 @@ private:
 	int currentLine;
 	screen currentScreen;
 
-	uint32_t read32(File f);
-	uint16_t read16(File f);
+	uint32_t read32(SdFile f);
+	uint16_t read16(SdFile f);
 
 	void drawSplashScreen();
 	void drawMainScreen();

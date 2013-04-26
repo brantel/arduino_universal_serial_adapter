@@ -14,7 +14,7 @@
 
 UIButton::UIButton(int buttonPin, int ledPin) {
 #if DEBUG == 2
-		Serial.println("UIButton::UIButton()");
+		serialPort0.println("UIButton::UIButton()");
 #endif
 	this->buttonPin = buttonPin;
 	this->ledPin = ledPin;
@@ -23,7 +23,7 @@ UIButton::UIButton(int buttonPin, int ledPin) {
 
 void UIButton::setup() {
 #if DEBUG == 2
-		Serial.println("UIButton::setup()");
+		serialPort0.println("UIButton::setup()");
 #endif
 	pinMode(buttonPin, INPUT);
 	pinMode(ledPin, OUTPUT);
@@ -31,25 +31,25 @@ void UIButton::setup() {
 
 void UIButton::turnOnLed() {
 #if DEBUG == 2
-		Serial.println("UIButton::turnOnLed()");
-		Serial.print("Turning on pin: ");
-		Serial.println(ledPin);
+		serialPort0.println("UIButton::turnOnLed()");
+		serialPort0.print("Turning on pin: ");
+		serialPort0.println(ledPin);
 #endif
 	digitalWrite(ledPin, HIGH);
 }
 
 void UIButton::turnOffLed() {
 #if DEBUG == 2
-		Serial.println("UIButton::turnOffLed()");
-		Serial.print("Turning off pin: ");
-		Serial.println(ledPin);
+		serialPort0.println("UIButton::turnOffLed()");
+		serialPort0.print("Turning off pin: ");
+		serialPort0.println(ledPin);
 #endif
 	digitalWrite(ledPin, LOW);
 }
 
 bool UIButton::isPressed() {
 	// if (DEBUG) {
-	//Serial.println("UIButton::isPressed()");
+	//serialPort0.println("UIButton::isPressed()");
 	// }
 	bool pressed = digitalRead(buttonPin);
 	while (digitalRead(buttonPin)); // Wait for release
