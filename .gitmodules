@@ -7,6 +7,6 @@
 [submodule "Libraries/Adafruit-SD"]
 	path = Libraries/Adafruit-SD
 	url = git://github.com/adafruit/SD.git
-[submodule ".\\Libraries\\Adafruit-RTClib"]
-	path = .\\Libraries\\Adafruit-RTClib
+[submodule "Libraries/Adafruit-RTClib"]
+	path = Libraries/Adafruit-RTClib
 	url = git://github.com/adafruit/RTClib.git
