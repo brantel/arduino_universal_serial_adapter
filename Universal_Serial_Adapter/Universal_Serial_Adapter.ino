@@ -29,6 +29,7 @@
 UI* ui;
 Config* config;
 RTC_DS1307 rtc;
+File dataFile;
 
 // helper for interrupt method call
 void processSerial() {
@@ -63,6 +64,8 @@ void setup() {
   Timer3.initialize(100);                // initialize timer3, value in micro seconds
   Timer3.pwm(timerThreePin, 512);        // setup pwm on appropriate pin, 50% duty cycle
   Timer3.attachInterrupt(processSerial); // attaches method as a timer overflow interrupt
+
+  dataFile = SD.open("datalog.txt", FILE_WRITE);
 }
 
 void loop() {

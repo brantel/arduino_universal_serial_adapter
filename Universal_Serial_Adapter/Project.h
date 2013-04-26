@@ -36,6 +36,9 @@
 // Timer pins
 #define timerThreePin 2 // Maps to Mega pin 12
 
+// Splash screen related
+#define splashScreenFileName "splash.bmp"
+
 // Colors / theme of UI
 #define SPLASH_BACKGROUND ST7735_WHITE
 #define BACKGROUND        ST7735_BLACK

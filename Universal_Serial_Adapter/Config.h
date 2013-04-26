@@ -13,12 +13,16 @@
 
 #include "Project.h"
 #include "UI.h"
+#include <SD.h>
 
 // Forward declaration of UI
 class UI;
 
 // Use global config and ui objects defined / initialized in main ino file
 extern UI* ui;
+
+// File to log data to
+extern File dataFile;
 
 class Config {
 private:

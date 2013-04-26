@@ -30,14 +30,22 @@ UI::UI() {
 }
 
 void UI::blinkOKButton() {
-	if (!config->isUIEnabled()) {
+	if (config->isUIEnabled()) {
+		okButton->turnOffLed();
+		okButton->turnOnLed();
+	}
+	else {
 		okButton->turnOnLed();
 		okButton->turnOffLed();
 	}
 }
 
 void UI::blinkCancelButton() {
-	if (!config->isUIEnabled()) {
+	if (config->isUIEnabled()) {
+		cancelButton->turnOffLed();
+		cancelButton->turnOnLed();
+	}
+	else {
 		cancelButton->turnOnLed();
 		cancelButton->turnOffLed();
 	}

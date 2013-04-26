@@ -29,7 +29,7 @@ UILCD::UILCD() {
 	tft->initR(INITR_BLACKTAB);
 	tft->setRotation(3);
 
-	if (!SD.begin(SD_CS) && DEBUG) {
+	if (!SD.begin(SD_CS)) {
 		Serial.println("SD.begin(SD_CS) -- failed!");
 	}
 }
@@ -188,17 +188,17 @@ void UILCD::mainScreenHilight(joyDirection direction) {
 
     // Skip blank lines
     if (config->getSerialMode() == ttl) {
-    #if DEBUG == 2
+#if DEBUG == 2
         Serial.println("Serial ttl blank line skip");
-    #endif
+#endif
       if (currentLine == 3 || currentLine == 6) {
         currentLine -= 1;
       }
     }
     else {
-    #if DEBUG == 2
+#if DEBUG == 2
         Serial.println("Non-serial ttl blank line skip");
-    #endif
+#endif
       if (currentLine == 2 || currentLine == 5) {
         currentLine -= 1;
       }
@@ -225,17 +225,17 @@ void UILCD::mainScreenHilight(joyDirection direction) {
 
     // Skip blank lines
     if (config->getSerialMode() == ttl) {
-    #if DEBUG == 2
+#if DEBUG == 2
         Serial.println("Serial ttl blank line skip");
-    #endif
+#endif
       if (currentLine == 3 || currentLine == 6) {
         currentLine += 1;
       }
     }
     else {
-    #if DEBUG == 2
+#if DEBUG == 2
         Serial.println("Non-serial ttl blank line skip");
-    #endif
+#endif
       if (currentLine == 2 || currentLine == 5) {
         currentLine += 1;
       }
@@ -472,7 +472,7 @@ void UILCD::drawSplashScreen() {
 #endif
   tft->setCursor(0,0);
 	tft->fillScreen(SPLASH_BACKGROUND);
-	bmpDraw("splash.bmp", 13, 0);
+	bmpDraw(splashScreenFileName, 13, 0);
   delay(1250);
   for (int16_t y=0; y < tft->height(); y+=1) {
     tft->drawFastHLine(0, y, tft->width(), BACKGROUND);
@@ -481,9 +481,10 @@ void UILCD::drawSplashScreen() {
 }
 
 void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
-#if DEBUG == 2
+  #if DEBUG == 2
     Serial.println("UILCD::bmpDraw()");
-#endif
+  #endif
+  
   File     bmpFile;
   int      bmpWidth, bmpHeight;   // W+H in pixels
   uint8_t  bmpDepth;              // Bit depth (currently must be 24)
@@ -497,57 +498,63 @@ void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
   uint8_t  r, g, b;
   uint32_t pos = 0, startTime = millis();
 
-  if((x >= tft->width()) || (y >= tft->height())) return;
+  if((x >= tft->width()) || (y >= tft->height())) {
+    return;
+  }
 
-#if DEBUG == 2
+  #if DEBUG == 2
     Serial.println();
     Serial.print("Loading image '");
     Serial.print(filename);
     Serial.println('\'');
-#endif
+  #endif
 
   // Open requested file on SD card
   if ((bmpFile = SD.open(filename)) == NULL) {
-  #if DEBUG == 2
-      Serial.print("File not found");
-  #endif
+    Serial.print("File not found");
     return;
   }
 
   // Parse BMP header
   if(read16(bmpFile) == 0x4D42) { // BMP signature
-  #if DEBUG == 2
+    long fileSize = read32(bmpFile);
+    #if DEBUG == 2
       Serial.print("File size: "); 
-      Serial.println(read32(bmpFile));
-  #endif
+      Serial.println(fileSize);
+    #endif
+    
     (void)read32(bmpFile); // Read & ignore creator bytes
     bmpImageoffset = read32(bmpFile); // Start of image data
-  #if DEBUG == 2
+
+    #if DEBUG == 2
       Serial.print("Image Offset: "); 
       Serial.println(bmpImageoffset, DEC);
-  #endif
-    // Read DIB header
-  #if DEBUG == 2
+    #endif
+
+    float headerSize = read32(bmpFile);
+
+    #if DEBUG == 2
+      // Read DIB header
       Serial.print("Header size: "); 
-      Serial.println(read32(bmpFile));
-  #endif
+      Serial.println(headerSize);
+    #endif
+
     bmpWidth  = read32(bmpFile);
     bmpHeight = read32(bmpFile);
     if(read16(bmpFile) == 1) { // # planes -- must be '1'
       bmpDepth = read16(bmpFile); // bits per pixel
-    #if DEBUG == 2
+      #if DEBUG == 2
         Serial.print("Bit Depth: "); 
         Serial.println(bmpDepth);
-    #endif
+      #endif
       if((bmpDepth == 24) && (read32(bmpFile) == 0)) { // 0 = uncompressed
-
         goodBmp = true; // Supported BMP format -- proceed!
-      #if DEBUG == 2
+        #if DEBUG == 2
           Serial.print("Image size: ");
           Serial.print(bmpWidth);
           Serial.print('x');
           Serial.println(bmpHeight);
-      #endif
+        #endif
 
         // BMP rows are padded (if needed) to 4-byte boundary
         rowSize = (bmpWidth * 3 + 3) & ~3;
@@ -562,8 +569,12 @@ void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
         // Crop area to be loaded
         w = bmpWidth;
         h = bmpHeight;
-        if((x+w-1) >= tft->width())  w = tft->width()  - x;
-        if((y+h-1) >= tft->height()) h = tft->height() - y;
+        if((x+w-1) >= tft->width()) {
+          w = tft->width()  - x;
+        }
+        if((y+h-1) >= tft->height()) {
+          h = tft->height() - y;
+        }
 
         // Set TFT address window to clipped image bounds
         tft->setAddrWindow(x, y, x+w-1, y+h-1);
@@ -576,10 +587,12 @@ void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
           // and scanline padding.  Also, the seek only takes
           // place if the file position actually needs to change
           // (avoids a lot of cluster math in SD library).
-          if(flip) // Bitmap is stored bottom-to-top order (normal BMP)
+          if(flip) { // Bitmap is stored bottom-to-top order (normal BMP)
             pos = bmpImageoffset + (bmpHeight - 1 - row) * rowSize;
-          else     // Bitmap is stored top-to-bottom
-          pos = bmpImageoffset + row * rowSize;
+          }
+          else {    // Bitmap is stored top-to-bottom
+            pos = bmpImageoffset + row * rowSize;
+          }
           if(bmpFile.position() != pos) { // Need seek?
             bmpFile.seek(pos);
             buffidx = sizeof(sdbuffer); // Force buffer reload
@@ -600,17 +613,19 @@ void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
           } // end pixel
           delay(5);
         } // end scanline
-      #if DEBUG == 2
+        #if DEBUG == 2
           Serial.print("Loaded in ");
           Serial.print(millis() - startTime);
           Serial.println(" ms");
-      #endif
+        #endif
       } // end goodBmp
     }
   }
 
   bmpFile.close();
-  if(!goodBmp && DEBUG == 2) Serial.println("BMP format not recognized.");
+  if(!goodBmp) {
+    Serial.println("BMP format not recognized.");
+  }
 }
 
 // These read 16- and 32-bit types from the SD card file.
