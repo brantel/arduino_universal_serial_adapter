@@ -10,9 +10,3 @@
 [submodule "Libraries/Adafruit-RTClib"]
 	path = Libraries/Adafruit-RTClib
 	url = git://github.com/adafruit/RTClib.git
-[submodule "Schematic/Libraries/SparkFun"]
-	path = Schematic/Libraries/SparkFun
-	url = git://github.com/sparkfun/SparkFun-Eagle-Libraries.git
-[submodule "Schematic/Libraries/Adafruit"]
-	path = Schematic/Libraries/Adafruit
-	url = git://github.com/adafruit/Adafruit-Eagle-Library.git
