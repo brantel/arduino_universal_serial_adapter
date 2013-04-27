@@ -28,20 +28,23 @@
 #include <Metro.h>
 #include "RTClib.h"
 
+// Globals used by main classes
 UI* ui;
 Config* config;
 RTC_DS1307 rtc;
-//SdFile dataFile;
-#if ARD_MEGA_2560
-SerialPort<0, 512, 512> serialPort0;
-SerialPort<1, 512, 512> serialPort1;
-SerialPort<2, 512, 512> serialPort2;
-SerialPort<3, 512, 512> serialPort3;
-#else
+SdFile dataFile;
+SdFat sd;
+
+#if ARD_DUE
 SerialPort<0, 4096, 4096> serialPort0;
 SerialPort<1, 4096, 4096> serialPort1;
 SerialPort<2, 4096, 4096> serialPort2;
 SerialPort<3, 4096, 4096> serialPort3;
+#else
+SerialPort<0, 512, 512> serialPort0;
+SerialPort<1, 512, 512> serialPort1;
+SerialPort<2, 512, 512> serialPort2;
+SerialPort<3, 512, 512> serialPort3;
 #endif
 
 // helper for interrupt method call
@@ -53,6 +56,14 @@ void setup() {
   // Setup various IO busses
   serialPort0.begin(115200);
   Wire.begin();
+
+  // Start the SD Card -- This should come very early
+  //   Not in config to guarantee it comes online very very early
+  serialPort0.println("Starting SD card");
+  if (!sd.begin(SD_CS, SPI_PROJECT_SPEED )) {
+    serialPort0.println("SD.begin(SD_CS, SPI_SPEED ) -- failed!");
+    sd.initErrorHalt();
+  }
 
   // Ensure RTC is set to run on battery
   // clear /EOSC bit

@@ -480,7 +480,6 @@ void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
     serialPort0.println("UILCD::bmpDraw()");
   #endif
   
-  SdFat sd;
   SdFile   bmpFile;
   int      bmpWidth, bmpHeight;   // W+H in pixels
   uint8_t  bmpDepth;              // Bit depth (currently must be 24)
@@ -496,13 +495,6 @@ void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
 
   if((x >= tft->width()) || (y >= tft->height())) {
     return;
-  }
-
-  serialPort0.println("Starting SD card");
-  // Start the SD Card -- FIXME: This should likely get moved to config
-  if (!sd.begin(SD_CS, SPI_PROJECT_SPEED )) {
-    serialPort0.println("SD.begin(SD_CS, SPI_HALF_SPEED ) -- failed!");
-    sd.initErrorHalt();
   }
 
   #if DEBUG >= 1

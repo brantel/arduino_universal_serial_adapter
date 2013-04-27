@@ -14,10 +14,11 @@
 #ifndef Project_h
 #define Project_h
 
-#define DEBUG 2 // NONE = 0; MINIMAL = 1; FULL = 2;
+#define DEBUG 1 // NONE = 0; MINIMAL = 1; FULL = 2;
 
-// Whether or not the Arduino Mega 2560 is used as the base board
-#define ARD_MEGA_2560 true
+// Whether or not the Arduino DUE is used as the base board
+// Assume Mega 2560 otherwise
+#define ARD_DUE false
 
 // Buttons / Joystick / Input Hardware Pinouts
 #define okButtonPin     22
@@ -57,22 +58,23 @@
 // Don't change anything below here
 // -----------------------------------------------------------------------------
 
+// Global SD card so LCD / config can read/write files
 extern SdFat sd;
 
 #define FONT_WIDTH  6
 #define FONT_HEIGHT 8
 
 // Serial ports
-#if ARD_MEGA_2560
-extern SerialPort<0, 512, 512> serialPort0;
-extern SerialPort<1, 512, 512> serialPort1;
-extern SerialPort<2, 512, 512> serialPort2;
-extern SerialPort<3, 512, 512> serialPort3;
-#else
+#if ARD_DUE
 extern SerialPort<0, 4096, 4096> serialPort0;
 extern SerialPort<1, 4096, 4096> serialPort1;
 extern SerialPort<2, 4096, 4096> serialPort2;
 extern SerialPort<3, 4096, 4096> serialPort3;
+#else
+extern SerialPort<0, 512, 512> serialPort0;
+extern SerialPort<1, 512, 512> serialPort1;
+extern SerialPort<2, 512, 512> serialPort2;
+extern SerialPort<3, 512, 512> serialPort3;
 #endif
 
 // Serial modes supported
