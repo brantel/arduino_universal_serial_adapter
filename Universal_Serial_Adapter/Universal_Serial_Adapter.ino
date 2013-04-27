@@ -33,10 +33,17 @@ Config* config;
 RTC_DS1307 rtc;
 SdFat sd;
 SdFile dataFile;
-SerialPort<0, 4096, 0> serialPort0;
-SerialPort<0, 4096, 0> serialPort1;
-SerialPort<0, 4096, 0> serialPort2;
-SerialPort<0, 4096, 0> serialPort3;
+#if ARD_MEGA_2560
+SerialPort<0, 512, 512> serialPort0;
+SerialPort<1, 512, 512> serialPort1;
+SerialPort<2, 512, 512> serialPort2;
+SerialPort<3, 512, 512> serialPort3;
+#else
+SerialPort<0, 4096, 4096> serialPort0;
+SerialPort<1, 4096, 4096> serialPort1;
+SerialPort<2, 4096, 4096> serialPort2;
+SerialPort<3, 4096, 4096> serialPort3;
+#endif
 
 // helper for interrupt method call
 void processSerial() {

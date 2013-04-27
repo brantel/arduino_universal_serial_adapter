@@ -238,13 +238,13 @@ void Config::processSerialData() {
 				int inByte = serialPort3.read();
 				serialPort0.write(inByte);
 				ui->blinkCancelButton();
-				dataFile.print(inByte);
+				//dataFile.print(inByte);
 			}
 			if (serialPort0.available()) {
 				int inByte = serialPort0.read();
 				serialPort3.write(inByte);
 				ui->blinkOKButton();
-				dataFile.print(inByte);
+				//dataFile.print(inByte);
 			}
 			break;
 		case 1: // db9_null
@@ -252,13 +252,13 @@ void Config::processSerialData() {
 				int inByte = serialPort2.read();
 				serialPort0.write(inByte);
 				ui->blinkCancelButton();
-				dataFile.print(inByte);
+				//dataFile.print(inByte);
 			}
 			if (serialPort0.available()) {
 				int inByte = serialPort0.read();
 				serialPort2.write(inByte);
 				ui->blinkOKButton();
-				dataFile.print(inByte);
+				//dataFile.print(inByte);
 			}
 			break;
 		case 2: // cisco
@@ -266,17 +266,17 @@ void Config::processSerialData() {
 				int inByte = serialPort1.read();
 				serialPort0.write(inByte);
 				ui->blinkCancelButton();
-				dataFile.print(inByte);
+				//dataFile.print(inByte);
 			}
 			if (serialPort0.available()) {
 				int inByte = serialPort0.read();
 				serialPort1.write(inByte);
 				ui->blinkOKButton();
-				dataFile.print(inByte);
-			}
+				//dataFile.print(inByte);
+		}
 			break;
 	}
 
 	// Flush data written to log file
-	dataFile.sync();
+	//dataFile.sync();
 }

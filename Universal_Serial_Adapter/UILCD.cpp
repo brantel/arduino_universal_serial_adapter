@@ -18,9 +18,10 @@
 #include "UIJoystickPSP.h"
 
 UILCD::UILCD() {
-#if DEBUG == 2
+  #if DEBUG == 2
     serialPort0.println("UILCD::UILCD()");
-#endif
+  #endif
+
   pinMode(LCD_LITE, OUTPUT);
 
 	tft = new Adafruit_ST7735(LCD_CS, LCD_DC, LCD_RST);
@@ -496,7 +497,7 @@ void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
     return;
   }
 
-  #if DEBUG == 2
+  #if DEBUG == 1
     serialPort0.println();
     serialPort0.print("Loading image '");
     serialPort0.print(filename);
@@ -505,7 +506,8 @@ void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
 
   // Open requested file on SD card
   if (!bmpFile.open(filename)) {
-    serialPort0.print("File not found");
+    serialPort0.print(filename);
+    serialPort0.println(" not found");
     return;
   }
 

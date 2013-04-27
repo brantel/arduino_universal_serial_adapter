@@ -15,6 +15,9 @@
 
 #define DEBUG 1 // NONE = 0; MINIMAL = 1; FULL = 2;
 
+// Whether or not the Arduino Mega 2560 is used as the base board
+#define ARD_MEGA_2560 true
+
 // Buttons / Joystick / Input Hardware Pinouts
 #define okButtonPin     22
 #define okButtonLed     23
@@ -54,10 +57,17 @@
 #define FONT_HEIGHT 8
 
 // Serial ports
-extern SerialPort<0, 4096, 0> serialPort0;
-extern SerialPort<0, 4096, 0> serialPort1;
-extern SerialPort<0, 4096, 0> serialPort2;
-extern SerialPort<0, 4096, 0> serialPort3;
+#if ARD_MEGA_2560
+extern SerialPort<0, 512, 512> serialPort0;
+extern SerialPort<1, 512, 512> serialPort1;
+extern SerialPort<2, 512, 512> serialPort2;
+extern SerialPort<3, 512, 512> serialPort3;
+#else
+extern SerialPort<0, 4096, 4096> serialPort0;
+extern SerialPort<1, 4096, 4096> serialPort1;
+extern SerialPort<2, 4096, 4096> serialPort2;
+extern SerialPort<3, 4096, 4096> serialPort3;
+#endif
 
 // Serial modes supported
 //  Abused in for loops / lookup tables -- DO NOT CHANGE none or set values
