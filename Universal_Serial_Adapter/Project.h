@@ -9,11 +9,12 @@
 */
 
 #include <SerialPort.h>
+#include <SdFat.h>
 
 #ifndef Project_h
 #define Project_h
 
-#define DEBUG 1 // NONE = 0; MINIMAL = 1; FULL = 2;
+#define DEBUG 2 // NONE = 0; MINIMAL = 1; FULL = 2;
 
 // Whether or not the Arduino Mega 2560 is used as the base board
 #define ARD_MEGA_2560 true
@@ -42,7 +43,10 @@
 #define timerThreePin 2 // Maps to Mega pin 12
 
 // Splash screen related
-#define splashScreenFileName "splash.bmp"
+#define splashScreenFileName "SPLASH.BMP"
+
+// SPI SD Card speed (Set to HALF for breadboards, full for better performance)
+#define SPI_PROJECT_SPEED SPI_HALF_SPEED
 
 // Colors / theme of UI
 #define SPLASH_BACKGROUND ST7735_WHITE
@@ -52,6 +56,8 @@
 
 // Don't change anything below here
 // -----------------------------------------------------------------------------
+
+extern SdFat sd;
 
 #define FONT_WIDTH  6
 #define FONT_HEIGHT 8

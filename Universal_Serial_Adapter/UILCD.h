@@ -44,8 +44,8 @@ private:
 	int currentLine;
 	screen currentScreen;
 
-	uint32_t read32(SdFile f);
-	uint16_t read16(SdFile f);
+	uint32_t read32(SdFile* f);
+	uint16_t read16(SdFile* f);
 
 	void drawSplashScreen();
 	void drawMainScreen();

@@ -27,10 +27,6 @@ Config::Config() {
 	pinMode(voltagePinOnePointEight, OUTPUT);
 	pinMode(voltagePinThreePointThree, OUTPUT);
 	pinMode(voltagePinFivePointZero, OUTPUT);
-
-#if DEBUG == 2
-		serialPort0.begin(115200);
-#endif
 }
 
 bool Config::isUIEnabled() {

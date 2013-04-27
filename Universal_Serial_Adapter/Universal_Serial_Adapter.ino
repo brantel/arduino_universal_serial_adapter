@@ -31,8 +31,7 @@
 UI* ui;
 Config* config;
 RTC_DS1307 rtc;
-SdFat sd;
-SdFile dataFile;
+//SdFile dataFile;
 #if ARD_MEGA_2560
 SerialPort<0, 512, 512> serialPort0;
 SerialPort<1, 512, 512> serialPort1;
@@ -74,13 +73,8 @@ void setup() {
   config->setDefaults();
   ui = new UI();
 
-  // Start the SD Card -- FIXME: This should likely get moved to config
-  if (!sd.begin(SD_CS)) {
-    serialPort0.println("SD.begin(SD_CS) -- failed!");
-  }
-
   // Open data log file -- FIXME: This needs to be controlled via config some
-  dataFile.open("datalog.txt", O_WRITE | O_CREAT | O_AT_END);
+  //dataFile.open("datalog.txt", O_WRITE | O_CREAT | O_AT_END);
 
   // Setup serial IO on an interrupt timer
   // ***THIS MUST BE DONE AFTER new Config()***

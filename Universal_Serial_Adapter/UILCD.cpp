@@ -480,7 +480,8 @@ void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
     serialPort0.println("UILCD::bmpDraw()");
   #endif
   
-  SdFile     bmpFile;
+  SdFat sd;
+  SdFile   bmpFile;
   int      bmpWidth, bmpHeight;   // W+H in pixels
   uint8_t  bmpDepth;              // Bit depth (currently must be 24)
   uint32_t bmpImageoffset;        // Start of image data in file
@@ -497,7 +498,14 @@ void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
     return;
   }
 
-  #if DEBUG == 1
+  serialPort0.println("Starting SD card");
+  // Start the SD Card -- FIXME: This should likely get moved to config
+  if (!sd.begin(SD_CS, SPI_PROJECT_SPEED )) {
+    serialPort0.println("SD.begin(SD_CS, SPI_HALF_SPEED ) -- failed!");
+    sd.initErrorHalt();
+  }
+
+  #if DEBUG >= 1
     serialPort0.println();
     serialPort0.print("Loading image '");
     serialPort0.print(filename);
@@ -505,47 +513,47 @@ void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
   #endif
 
   // Open requested file on SD card
-  if (!bmpFile.open(filename)) {
+  if (!bmpFile.open(filename, O_READ)) {
     serialPort0.print(filename);
     serialPort0.println(" not found");
     return;
   }
 
   // Parse BMP header
-  if(read16(bmpFile) == 0x4D42) { // BMP signature
-    long fileSize = read32(bmpFile);
+  if(read16(&bmpFile) == 0x4D42) { // BMP signature
+    uint32_t fileSize = read32(&bmpFile);
     #if DEBUG == 2
       serialPort0.print("File size: "); 
       serialPort0.println(fileSize);
     #endif
     
-    (void)read32(bmpFile); // Read & ignore creator bytes
-    bmpImageoffset = read32(bmpFile); // Start of image data
+    (void)read32(&bmpFile); // Read & ignore creator bytes
+    bmpImageoffset = read32(&bmpFile); // Start of image data
 
     #if DEBUG == 2
       serialPort0.print("Image Offset: "); 
       serialPort0.println(bmpImageoffset, DEC);
     #endif
 
-    float headerSize = read32(bmpFile);
+    // Read DIB header
+    float headerSize = read32(&bmpFile);
 
     #if DEBUG == 2
-      // Read DIB header
       serialPort0.print("Header size: "); 
       serialPort0.println(headerSize);
     #endif
 
-    bmpWidth  = read32(bmpFile);
-    bmpHeight = read32(bmpFile);
-    if(read16(bmpFile) == 1) { // # planes -- must be '1'
-      bmpDepth = read16(bmpFile); // bits per pixel
-      #if DEBUG == 2
+    bmpWidth  = read32(&bmpFile);
+    bmpHeight = read32(&bmpFile);
+    if(read16(&bmpFile) == 1) { // # planes -- must be '1'
+      bmpDepth = read16(&bmpFile); // bits per pixel
+      #if DEBUG >= 1
         serialPort0.print("Bit Depth: "); 
         serialPort0.println(bmpDepth);
       #endif
-      if((bmpDepth == 24) && (read32(bmpFile) == 0)) { // 0 = uncompressed
+      if((bmpDepth == 24) && (read32(&bmpFile) == 0)) { // 0 = uncompressed
         goodBmp = true; // Supported BMP format -- proceed!
-        #if DEBUG == 2
+        #if DEBUG >= 1
           serialPort0.print("Image size: ");
           serialPort0.print(bmpWidth);
           serialPort0.print('x');
@@ -590,14 +598,14 @@ void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
             pos = bmpImageoffset + row * rowSize;
           }
           if(bmpFile.curPosition() != pos) { // Need seek?
-            bmpFile.seekCur(pos);
+            bmpFile.seekSet(pos);
             buffidx = sizeof(sdbuffer); // Force buffer reload
           }
 
           for (col=0; col<w; col++) { // For each pixel...
             // Time to read more pixel data?
             if (buffidx >= sizeof(sdbuffer)) { // Indeed
-              bmpFile.read(sdbuffer, sizeof(sdbuffer));
+              bmpFile.read(&sdbuffer, sizeof(sdbuffer));
               buffidx = 0; // Set index to beginning
             }
 
@@ -628,24 +636,20 @@ void UILCD::bmpDraw(char *filename, uint8_t x, uint8_t y) {
 // BMP data is stored little-endian, Arduino is little-endian too.
 // May need to reverse subscript order if porting elsewhere.
 
-uint16_t UILCD::read16(SdFile f) {
-#if DEBUG == 2
-    serialPort0.println("UILCD::read16()");
-#endif
+uint16_t UILCD::read16(SdFile* f) {
+//#if DEBUG == 2
+//    serialPort0.println("UILCD::read16()");
+//#endif
   uint16_t result;
-  ((uint8_t *)&result)[0] = f.read(); // LSB
-  ((uint8_t *)&result)[1] = f.read(); // MSB
+  int numBytesRead = f->read(&result, sizeof(result));
   return result;
 }
 
-uint32_t UILCD::read32(SdFile f) {
-#if DEBUG == 2
-    serialPort0.println("UILCD::read32()");
-#endif
+uint32_t UILCD::read32(SdFile* f) {
+//#if DEBUG == 2
+//    serialPort0.println("UILCD::read32()");
+//#endif
   uint32_t result;
-  ((uint8_t *)&result)[0] = f.read(); // LSB
-  ((uint8_t *)&result)[1] = f.read();
-  ((uint8_t *)&result)[2] = f.read();
-  ((uint8_t *)&result)[3] = f.read(); // MSB
+  int numBytesRead = f->read(&result, sizeof(result));
   return result;
 }
