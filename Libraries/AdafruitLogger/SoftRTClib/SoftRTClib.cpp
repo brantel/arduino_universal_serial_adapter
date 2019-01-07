@@ -35,7 +35,7 @@ static uint8_t c2b(const char *s) {
 }
 //------------------------------------------------------------------------------
 // used by c2m and printMmm
-static char Mmm[] PROGMEM = "JanFebMarAprMayJunJulAugSepOctNovDec";
+static const char Mmm[] PROGMEM = "JanFebMarAprMayJunJulAugSepOctNovDec";
 //------------------------------------------------------------------------------
 // convert Mmm string to [0,12]
 static uint8_t c2m(const char* s) {
@@ -96,7 +96,7 @@ void DateTime::printDateTime(Print* pr) const {
  * \param[in] pr Print stream.
  */
 void DateTime::printDdd(Print* pr) const {
-  static char Ddd[] PROGMEM = "SunMonTueWedThuFriSat";
+  static const char Ddd[] PROGMEM = "SunMonTueWedThuFriSat";
   char buf[4];
   uint8_t w = dayOfWeek();
   strncpy_P(buf, &Ddd[3*w], 3);
